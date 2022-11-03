@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="GNU Affero General Public License v3.0"
+
+[[mods]]
+modId="infiltrators"
+version="${file.jarVersion}"
+displayName="Tales of Villagers: The Infiltrators"
+displayURL="https://github.com/Viola-Siemens/Tales-of-Villagers-The-Infiltrators"
+logoFile="logo.png"
+credits="Hexagram"
+authors="Liu Dongyu"
+description='''
+This mod adds some "fake villagers", the infiltrators, who will fake their works and prevent other villagers from working.
+
+Also, when raids occur, the Infiltrators will help the illagers to attack other villagers.
+
+Can you still beat the game and save the village?
+'''
+
+[[dependencies.infiltrators]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40,)"
+	ordering="NONE"
+    side="BOTH"
+	
+[[dependencies.infiltrators]]
+    modId="minecraft"
+    mandatory=true
+	versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"
