@@ -1,4 +1,4 @@
-# The Illagers of Miller's Village
+# Tales of Villagers:The Infiltrators
 
 A Minecraft Mod based on Forge.
 
