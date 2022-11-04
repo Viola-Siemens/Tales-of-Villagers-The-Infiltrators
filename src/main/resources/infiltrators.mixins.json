@@ -5,6 +5,7 @@
   "refmap": "infiltrators.refmap.json",
   "mixins": [
 	"AbstractIllagerEntityMixin",
+	"PoiCompetitorScanMixin",
 	"RavagerEntityMixin",
 	"VillagerEntityMixin",
 	"YieldJobSiteMixin"

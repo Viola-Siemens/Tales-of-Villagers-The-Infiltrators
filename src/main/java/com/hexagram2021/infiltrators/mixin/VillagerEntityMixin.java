@@ -128,7 +128,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		}
 		
 		Villager current = (Villager)(Object)this;
-		AABB aabb = new AABB(current.getX() - 20.0D, current.getX() + 20.0D, current.getY() - 8.0D, current.getY() + 8.0D, current.getZ() - 20.0D, current.getZ() + 20.0D);
+		AABB aabb = new AABB(current.getX() - 20.0D, current.getY() - 8.0D, current.getZ() - 20.0D, current.getX() + 20.0D, current.getY() + 8.0D, current.getZ() + 20.0D);
 		if(!current.level.getEntities(current, aabb, entity -> entity instanceof Villager && ((InfiltratorDataHolder)entity).isInfiltrator()).isEmpty() &&
 				current.getRandom().nextInt(100) < INFILTRATOR_BREAK_OTHERS_WORK) {
 			//TODO: delete this in release
@@ -210,7 +210,6 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 				Pair.of(0, new ValidateNearbyPoi(villagerprofession.getJobPoiType(), MemoryModuleType.JOB_SITE)),
 				Pair.of(0, new ValidateNearbyPoi(villagerprofession.getJobPoiType(), MemoryModuleType.POTENTIAL_JOB_SITE)),
 				Pair.of(1, new MoveToTargetSink()),
-				Pair.of(2, new PoiCompetitorScan(villagerprofession)),
 				Pair.of(3, new LookAndFollowTradingPlayerSink(speed)),
 				Pair.of(5, new GoToWantedItem<>(speed, false, 4)),
 				Pair.of(6, new FakeAcquirePoi(villagerprofession.getJobPoiType(), MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, true)),
