@@ -1,7 +1,6 @@
 package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
-import com.hexagram2021.infiltrators.mixin.PoiManagerAccess;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -66,18 +65,18 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 		}
 	}
 	
-	protected void start(ServerLevel level, Villager villager, long retryTick) {
-		this.nextScheduledStart = retryTick + RATE + (long)level.getRandom().nextInt(RATE);
+	protected void start(ServerLevel level, Villager villager, long tick) {
+		this.nextScheduledStart = tick + RATE + (long)level.getRandom().nextInt(RATE);
 		PoiManager poimanager = level.getPoiManager();
-		this.batchCache.long2ObjectEntrySet().removeIf((entry) -> !entry.getValue().isStillValid(retryTick));
+		this.batchCache.long2ObjectEntrySet().removeIf((entry) -> !entry.getValue().isStillValid(tick));
 		Predicate<BlockPos> predicate = (blockPos) -> {
 			FakeAcquirePoi.JitteredLinearRetry retry = this.batchCache.get(blockPos.asLong());
 			if (retry == null) {
 				return true;
-			} else if (!retry.shouldRetry(retryTick)) {
+			} else if (!retry.shouldRetry(tick)) {
 				return false;
 			} else {
-				retry.markAttempt(retryTick);
+				retry.markAttempt(tick);
 				return true;
 			}
 		};
@@ -95,7 +94,7 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 			});
 		} else {
 			for(BlockPos blockpos : set) {
-				this.batchCache.computeIfAbsent(blockpos.asLong(), (v) -> new FakeAcquirePoi.JitteredLinearRetry(villager.level.random, retryTick));
+				this.batchCache.computeIfAbsent(blockpos.asLong(), (v) -> new FakeAcquirePoi.JitteredLinearRetry(villager.level.random, tick));
 			}
 		}
 		
