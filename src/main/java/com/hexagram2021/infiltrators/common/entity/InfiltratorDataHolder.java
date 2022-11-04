@@ -1,4 +1,4 @@
-package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
+package com.hexagram2021.infiltrators.common.entity;
 
 public interface InfiltratorDataHolder {
 	boolean isInfiltrator();

@@ -54,6 +54,7 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 		return builder.build();
 	}
 	
+	@Override
 	protected boolean checkExtraStartConditions(@NotNull ServerLevel level, @NotNull Villager villager) {
 		if (this.onlyIfAdult && villager.isBaby()) {
 			return false;
@@ -65,6 +66,7 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 		}
 	}
 	
+	@Override
 	protected void start(ServerLevel level, Villager villager, long tick) {
 		this.nextScheduledStart = tick + RATE + (long)level.getRandom().nextInt(RATE);
 		PoiManager poimanager = level.getPoiManager();
@@ -97,12 +99,11 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 				this.batchCache.computeIfAbsent(blockpos.asLong(), (v) -> new FakeAcquirePoi.JitteredLinearRetry(villager.level.random, tick));
 			}
 		}
-		
 	}
 	
-	@SuppressWarnings("UnusedReturnValue")
+	@SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 	private static Optional<BlockPos> takeWithoutAcquireTicket(PoiManager manager, Predicate<PoiType> checkPoi, Predicate<BlockPos> checkPos, BlockPos blockPos, int range) {
-		return manager.getInRange(checkPoi, blockPos, range, PoiManager.Occupancy.HAS_SPACE)
+		return manager.getInRange(checkPoi, blockPos, range, PoiManager.Occupancy.ANY)
 				.filter((record) -> checkPos.test(record.getPos())).findFirst().map(PoiRecord::getPos);
 	}
 	
@@ -135,6 +136,7 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 			return attempt >= this.nextScheduledAttemptTimestamp;
 		}
 		
+		@Override
 		public String toString() {
 			return "RetryMarker{, previousAttemptAt=" + this.previousAttemptTimestamp + ", nextScheduledAttemptAt=" + this.nextScheduledAttemptTimestamp + ", currentDelay=" + this.currentDelay + "}";
 		}

@@ -2,10 +2,10 @@ package com.hexagram2021.infiltrators.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeAcquirePoi;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeWorkAtPoi;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entity.ai.behaviors.*;
+import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -31,12 +31,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
+import static net.minecraft.world.entity.EntityEvent.VILLAGER_ANGRY;
 import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;
 
 @SuppressWarnings("unused")
 @Mixin(Villager.class)
 public class VillagerEntityMixin implements InfiltratorDataHolder {
-	private static final int INFILTRATOR_POSSIBILITY_CAUSE_RAID = 5;
+	private static final int INFILTRATOR_POSSIBILITY_CAUSE_RAID = 20;
 	private static final int INFILTRATOR_CAUSE_RAID_TICK = 14000;
 	
 	private static final int INFILTRATOR_BREAK_OTHERS_WORK = 80;
@@ -49,7 +50,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN;
 	
 	@Inject(method = "registerBrainGoals", at = @At(value = "HEAD"), cancellable = true)
-	private void getVillagerPanicPacket(Brain<Villager> brain, CallbackInfo ci) {
+	private void registerInfiltratorBrainGoals(Brain<Villager> brain, CallbackInfo ci) {
 		Villager current = (Villager)(Object)this;
 		
 		if(this.isInfiltrator) {
@@ -103,6 +104,15 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		return instance.getPlayerReputation(player);
 	}
 	
+	@Redirect(method = "releaseAllPois", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;releasePoi(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V", ordinal = 1))
+	public void doNotReleaseJobSiteIfInfiltrator(Villager instance, MemoryModuleType<GlobalPos> memoryModuleType) {
+		//Do nothing
+	}
+	@Redirect(method = "releaseAllPois", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;releasePoi(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V", ordinal = 2))
+	public void doNotReleasePotentialJobSiteIfInfiltrator(Villager instance, MemoryModuleType<GlobalPos> memoryModuleType) {
+		//Do nothing
+	}
+	
 	@Inject(method = "shouldRestock", at = @At(value = "HEAD"), cancellable = true)
 	public void checkIfInfiltrator(CallbackInfoReturnable<Boolean> cir) {
 		if(this.isInfiltrator()) {
@@ -121,6 +131,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		AABB aabb = new AABB(current.getX() - 20.0D, current.getX() + 20.0D, current.getY() - 8.0D, current.getY() + 8.0D, current.getZ() - 20.0D, current.getZ() + 20.0D);
 		if(!current.level.getEntities(current, aabb, entity -> entity instanceof Villager && ((InfiltratorDataHolder)entity).isInfiltrator()).isEmpty() &&
 				current.getRandom().nextInt(100) < INFILTRATOR_BREAK_OTHERS_WORK) {
+			//TODO: delete this in release
+			current.level.broadcastEntityEvent(current, VILLAGER_ANGRY);
 			ci.cancel();
 		}
 	}
@@ -202,8 +214,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 				Pair.of(3, new LookAndFollowTradingPlayerSink(speed)),
 				Pair.of(5, new GoToWantedItem<>(speed, false, 4)),
 				Pair.of(6, new FakeAcquirePoi(villagerprofession.getJobPoiType(), MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, true)),
-				Pair.of(7, new GoToPotentialJobSite(speed)),
-				Pair.of(8, new YieldJobSite(speed)),
+				Pair.of(7, new FakeGoToPotentialJobSite(speed)),
 				Pair.of(10, new AcquirePoi(PoiType.HOME, MemoryModuleType.HOME, false, Optional.of(VILLAGER_HAPPY))),
 				Pair.of(10, new AcquirePoi(PoiType.MEETING, MemoryModuleType.MEETING_POINT, true, Optional.of(VILLAGER_HAPPY))),
 				Pair.of(10, new AssignProfessionFromJobSite()),
