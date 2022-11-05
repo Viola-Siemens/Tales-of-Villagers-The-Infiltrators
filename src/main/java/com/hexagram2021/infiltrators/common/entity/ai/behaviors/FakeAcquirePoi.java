@@ -1,6 +1,7 @@
 package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
+import com.hexagram2021.infiltrators.Infiltrators;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -40,10 +41,6 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 		this.onlyIfAdult = onlyIfAdult;
 	}
 	
-	public FakeAcquirePoi(PoiType poiType, MemoryModuleType<GlobalPos> memoryToAcquire, boolean onlyIfAdult) {
-		this(poiType, memoryToAcquire, memoryToAcquire, onlyIfAdult);
-	}
-	
 	private static ImmutableMap<MemoryModuleType<?>, MemoryStatus> constructEntryConditionMap(MemoryModuleType<GlobalPos> moduleType, MemoryModuleType<GlobalPos> memoryToAcquire) {
 		ImmutableMap.Builder<MemoryModuleType<?>, MemoryStatus> builder = ImmutableMap.builder();
 		builder.put(moduleType, MemoryStatus.VALUE_ABSENT);
@@ -58,12 +55,12 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 	protected boolean checkExtraStartConditions(@NotNull ServerLevel level, @NotNull Villager villager) {
 		if (this.onlyIfAdult && villager.isBaby()) {
 			return false;
-		} else if (this.nextScheduledStart == 0L) {
+		}
+		if (this.nextScheduledStart == 0L) {
 			this.nextScheduledStart = villager.level.getGameTime() + (long)level.random.nextInt(RATE);
 			return false;
-		} else {
-			return level.getGameTime() >= this.nextScheduledStart;
 		}
+		return level.getGameTime() >= this.nextScheduledStart;
 	}
 	
 	@Override
@@ -75,12 +72,12 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 			FakeAcquirePoi.JitteredLinearRetry retry = this.batchCache.get(blockPos.asLong());
 			if (retry == null) {
 				return true;
-			} else if (!retry.shouldRetry(tick)) {
-				return false;
-			} else {
-				retry.markAttempt(tick);
-				return true;
 			}
+			if (!retry.shouldRetry(tick)) {
+				return false;
+			}
+			retry.markAttempt(tick);
+			return true;
 		};
 		Set<BlockPos> set = poimanager
 				.findAllClosestFirst(this.poiType.getPredicate(), predicate, villager.blockPosition(), SCAN_RANGE, PoiManager.Occupancy.ANY)
@@ -132,8 +129,8 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 			return time - this.previousAttemptTimestamp < MAX_RETRY_PATHFINDING_INTERVAL;
 		}
 		
-		public boolean shouldRetry(long attempt) {
-			return attempt >= this.nextScheduledAttemptTimestamp;
+		public boolean shouldRetry(long time) {
+			return time >= this.nextScheduledAttemptTimestamp;
 		}
 		
 		@Override

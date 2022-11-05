@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 @Mod(Infiltrators.MODID)
 public class Infiltrators {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     
     public static final String MODID = "infiltrators";
 

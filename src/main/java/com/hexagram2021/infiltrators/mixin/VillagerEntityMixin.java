@@ -80,7 +80,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		}
 	}
 	
-	@Inject(method = "addAdditionalSaveData", at = @At(value = "TAIL"))
+	@Inject(method = "addAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putInt(Ljava/lang/String;I)V", ordinal = 1, shift = At.Shift.BEFORE))
 	private void addIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
 		if(this.isInfiltrator) {
 			nbt.putBoolean("IsInfiltrator", true);
@@ -88,11 +88,13 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		}
 	}
 	
-	@Inject(method = "readAdditionalSaveData", at = @At(value = "TAIL"))
+	@Inject(method = "readAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;setCanPickUpLoot(Z)V", shift = At.Shift.BEFORE))
 	private void readIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
 		if (nbt.contains("IsInfiltrator")) {
 			this.isInfiltrator = nbt.getBoolean("IsInfiltrator");
 			this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
+		} else {
+			this.isInfiltrator = false;
 		}
 	}
 	
@@ -131,8 +133,6 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		AABB aabb = new AABB(current.getX() - 20.0D, current.getY() - 8.0D, current.getZ() - 20.0D, current.getX() + 20.0D, current.getY() + 8.0D, current.getZ() + 20.0D);
 		if(!current.level.getEntities(current, aabb, entity -> entity instanceof Villager && ((InfiltratorDataHolder)entity).isInfiltrator()).isEmpty() &&
 				current.getRandom().nextInt(100) < INFILTRATOR_BREAK_OTHERS_WORK) {
-			//TODO: delete this in release
-			current.level.broadcastEntityEvent(current, VILLAGER_ANGRY);
 			ci.cancel();
 		}
 	}
@@ -178,8 +178,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 				Pair.of(5, new RunOne<>(ImmutableList.of(
 						Pair.of(new FakeWorkAtPoi(), 6),
 						Pair.of(new StrollAroundPoi(MemoryModuleType.JOB_SITE, 0.4F, 4), 3),
-						Pair.of(new StrollToPoi(MemoryModuleType.JOB_SITE, 0.4F, 1, 10), 5),
-						Pair.of(new StrollToPoiList(MemoryModuleType.SECONDARY_JOB_SITE, speed, 1, 6, MemoryModuleType.JOB_SITE), 5)
+						Pair.of(new StrollToPoi(MemoryModuleType.JOB_SITE, 0.4F, 1, 10), 5)
 				))),
 				Pair.of(10, new ShowTradesToPlayer(400, 1600)),
 				Pair.of(10, new SetLookAndInteract(EntityType.PLAYER, 4)),
