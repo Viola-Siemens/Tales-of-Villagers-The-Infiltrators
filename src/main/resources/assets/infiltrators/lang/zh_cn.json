@@ -1,0 +1,17 @@
+{
+  "language": "Chinese",
+  "language.code": "zh_cn",
+  "language.region": "China",
+  "itemGroup.infiltrators": "村民之书·渗透者",
+  "infiltrators.config.title": "",
+
+  "item.infiltrators.savior_book": "守卫之书",
+  "item.infiltrators.seer_book": "预言家之书",
+
+  "desc.infiltrators.savior_book": "这本书使用在正在睡觉的村民身上，可以阻止当晚渗透者发动袭击",
+  "desc.infiltrators.seer_book": "这本书使用在正在睡觉的村民身上，可以查验他是否是渗透者",
+
+  "message.seer.positive": "这个村民是渗透者！快去制服他！",
+  "message.seer.negative": "这个村民不是渗透者。",
+  "message.savior.success": "这个村民至少今晚不会引起袭击了——如果他是渗透者的话。"
+}

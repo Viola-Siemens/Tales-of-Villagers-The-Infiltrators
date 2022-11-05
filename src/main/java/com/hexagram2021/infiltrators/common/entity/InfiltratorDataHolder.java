@@ -6,4 +6,6 @@ public interface InfiltratorDataHolder {
 	int getPossibilityBreakingWorkstation();
 	
 	void increasePossibilityBreakingWorkstation();
+	
+	void setImmuneToBadOmen();
 }

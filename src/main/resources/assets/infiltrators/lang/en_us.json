@@ -1,0 +1,17 @@
+{
+  "language": "English",
+  "language.code": "en_us",
+  "language.region": "United States",
+  "itemGroup.infiltrators": "Tales of Villagers: The Infiltrators",
+  "infiltrators.config.title": "",
+
+  "item.infiltrators.savior_book": "Savior Book",
+  "item.infiltrators.seer_book": "Seer Book",
+
+  "desc.infiltrators.savior_book": "This book is used on sleeping villagers at night to stop an infiltrator cause a raid tonight",
+  "desc.infiltrators.seer_book": "This book is used on sleeping villagers at night to identity whether a villager is an infiltrator or not",
+
+  "message.seer.positive": "This villager IS AN INFILTRATOR! Take him down!",
+  "message.seer.negative": "This villager is NOT an infiltrator.",
+  "message.savior.success": "This villager will not cause raids tonight - if he is an infiltrator."
+}

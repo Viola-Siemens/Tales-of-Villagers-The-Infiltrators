@@ -2,9 +2,12 @@ package com.hexagram2021.infiltrators.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.*;
 import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeAcquirePoi;
+import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeGoToPotentialJobSite;
+import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeWorkAtPoi;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,9 +21,11 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,14 +36,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static net.minecraft.world.entity.EntityEvent.VILLAGER_ANGRY;
 import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;
 
 @SuppressWarnings("unused")
 @Mixin(Villager.class)
 public class VillagerEntityMixin implements InfiltratorDataHolder {
-	private static final int INFILTRATOR_POSSIBILITY_CAUSE_RAID = 20;
+	
+	private static final int INFILTRATOR_POSSIBILITY_CAUSE_RAID = 10;
 	private static final int INFILTRATOR_CAUSE_RAID_TICK = 14000;
+	
+	private static final int INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION = 25;
+	private static final int INFILTRATOR_CHANGE_PROFESSION_TICK = 50;
 	
 	private static final int INFILTRATOR_BREAK_OTHERS_WORK = 80;
 	
@@ -48,6 +56,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	boolean isInfiltrator;
 	
 	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN;
+	
+	boolean isImmuneToBadOmen;
 	
 	@Inject(method = "registerBrainGoals", at = @At(value = "HEAD"), cancellable = true)
 	private void registerInfiltratorBrainGoals(Brain<Villager> brain, CallbackInfo ci) {
@@ -85,6 +95,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		if(this.isInfiltrator) {
 			nbt.putBoolean("IsInfiltrator", true);
 			nbt.putInt("PossibilityBreakingWorkstation", this.possibilityBreakingWorkstation);
+			nbt.putBoolean("IsImmuneToBadOmen", this.isImmuneToBadOmen);
 		}
 	}
 	
@@ -92,9 +103,11 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	private void readIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
 		if (nbt.contains("IsInfiltrator")) {
 			this.isInfiltrator = nbt.getBoolean("IsInfiltrator");
+			this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
 			this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
 		} else {
 			this.isInfiltrator = false;
+			this.isImmuneToBadOmen = false;
 		}
 	}
 	
@@ -138,13 +151,37 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	}
 	
 	@Inject(method = "customServerAiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/AbstractVillager;customServerAiStep()V"))
-	protected void tryCauseRaid(CallbackInfo ci) {
+	protected void tryCauseRaidAndChangeProfession(CallbackInfo ci) {
 		Villager current = (Villager)(Object)this;
 		
-		if(this.isInfiltrator() && current.level.dayTime() == INFILTRATOR_CAUSE_RAID_TICK && current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CAUSE_RAID) {
-			Player player = current.level.getNearestPlayer(current, 32.0D);
-			if(player != null) {
-				player.addEffect(new MobEffectInstance(MobEffects.BAD_OMEN, 20, 5));
+		long timeOfDay = current.level.dayTime() % 24000L;
+		
+		if(this.isInfiltrator()){
+			if(timeOfDay == INFILTRATOR_CAUSE_RAID_TICK) {
+				if(this.isImmuneToBadOmen) {
+					this.isImmuneToBadOmen = false;
+				} else if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CAUSE_RAID) {
+					Player player = current.level.getNearestPlayer(current, 32.0D);
+					if(player != null) {
+						player.addEffect(new MobEffectInstance(MobEffects.BAD_OMEN, 20, 5));
+					}
+				}
+			} else if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK) {
+				if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION) {
+					AABB aabb = new AABB(current.getX() - 32.0D, current.getY() - 12.0D, current.getZ() - 32.0D, current.getX() + 32.0D, current.getY() + 12.0D, current.getZ() + 32.0D);
+					current.level.getEntities(current, aabb, entity -> {
+						if(entity instanceof Villager) {
+							if(((InfiltratorDataHolder)entity).isInfiltrator()) {
+								return current.getRandom().nextBoolean();
+							}
+							return true;
+						}
+						return false;
+					}).stream().map(entity -> (Villager)entity).findAny().ifPresent(villager -> {
+						current.getVillagerData().setProfession(villager.getVillagerData().getProfession());
+						this.setFakeMerchantOffers();
+					});
+				}
 			}
 		}
 	}
@@ -167,6 +204,27 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	@Override
 	public void increasePossibilityBreakingWorkstation() {
 		this.possibilityBreakingWorkstation += 1;
+	}
+	
+	@Override
+	public void setImmuneToBadOmen() {
+		this.isImmuneToBadOmen = true;
+	}
+	
+	private void setFakeMerchantOffers() {
+		Villager current = (Villager)(Object)this;
+		VillagerProfession profession = current.getVillagerData().getProfession();
+		
+		int level = current.getVillagerData().getLevel();
+		
+		current.setOffers(new MerchantOffers());
+		if(profession == VillagerProfession.NITWIT || profession == VillagerProfession.NONE) {
+			return;
+		}
+		Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.get(profession);
+		for(int i = 1; i <= level; ++i) {
+			current.addOffersFromItemListings(current.getOffers(), trades.get(level), 2);
+		}
 	}
 	
 	//TODO: Infiltrator will NOT give gift to hero.
