@@ -2,6 +2,7 @@ package com.hexagram2021.infiltrators;
 
 import com.hexagram2021.infiltrators.client.ClientProxy;
 import com.hexagram2021.infiltrators.common.InfContent;
+import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import com.hexagram2021.infiltrators.common.register.InfItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -54,6 +56,8 @@ public class Infiltrators {
         );
         InfContent.modConstruction(bus, runLater);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, bootstrapErrorToXCPInDev(() -> ClientProxy::modConstruction));
+        
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, InfCommonConfig.SPEC);
 
         MinecraftForge.EVENT_BUS.register(this);
     }

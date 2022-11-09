@@ -35,27 +35,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.Random;
 
+import static com.hexagram2021.infiltrators.common.config.InfCommonConfig.*;
 import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;
 
 @SuppressWarnings("unused")
 @Mixin(Villager.class)
 public class VillagerEntityMixin implements InfiltratorDataHolder {
 	
-	private static final int INFILTRATOR_POSSIBILITY_CAUSE_RAID = 10;
-	private static final int INFILTRATOR_CAUSE_RAID_TICK = 14000;
-	
-	private static final int INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION = 25;
-	private static final int INFILTRATOR_CHANGE_PROFESSION_TICK = 50;
-	
-	private static final int INFILTRATOR_BREAK_OTHERS_WORK = 80;
-	
-	private static final int INFILTRATOR_BREAK_WORKSTATION_MIN = 5;
-	private static final int INFILTRATOR_BREAK_WORKSTATION_MAX = 10;
-	
 	boolean isInfiltrator;
 	
-	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN;
+	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN.get();
 	
 	boolean isImmuneToBadOmen;
 	
@@ -92,8 +83,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	
 	@Inject(method = "addAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;putInt(Ljava/lang/String;I)V", ordinal = 1, shift = At.Shift.BEFORE))
 	private void addIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
+		nbt.putBoolean("IsInfiltrator", this.isInfiltrator);
 		if(this.isInfiltrator) {
-			nbt.putBoolean("IsInfiltrator", true);
 			nbt.putInt("PossibilityBreakingWorkstation", this.possibilityBreakingWorkstation);
 			nbt.putBoolean("IsImmuneToBadOmen", this.isImmuneToBadOmen);
 		}
@@ -106,8 +97,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 			this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
 			this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
 		} else {
-			this.isInfiltrator = false;
 			this.isImmuneToBadOmen = false;
+			this.isInfiltrator = ((Villager)(Object)this).getRandom().nextInt(100) < INFILTRATOR_SPAWN_POSSIBILITY.get();
 		}
 	}
 	
@@ -145,7 +136,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		Villager current = (Villager)(Object)this;
 		AABB aabb = new AABB(current.getX() - 20.0D, current.getY() - 8.0D, current.getZ() - 20.0D, current.getX() + 20.0D, current.getY() + 8.0D, current.getZ() + 20.0D);
 		if(!current.level.getEntities(current, aabb, entity -> entity instanceof Villager && ((InfiltratorDataHolder)entity).isInfiltrator()).isEmpty() &&
-				current.getRandom().nextInt(100) < INFILTRATOR_BREAK_OTHERS_WORK) {
+				current.getRandom().nextInt(100) < INFILTRATOR_BREAK_OTHERS_WORK.get()) {
 			ci.cancel();
 		}
 	}
@@ -157,18 +148,19 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		long timeOfDay = current.level.dayTime() % 24000L;
 		
 		if(this.isInfiltrator()){
-			if(timeOfDay == INFILTRATOR_CAUSE_RAID_TICK) {
+			if(timeOfDay == INFILTRATOR_CAUSE_RAID_TICK.get()) {
 				if(this.isImmuneToBadOmen) {
 					this.isImmuneToBadOmen = false;
-				} else if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CAUSE_RAID) {
+				} else if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CAUSE_RAID.get()) {
 					Player player = current.level.getNearestPlayer(current, 32.0D);
 					if(player != null) {
 						player.addEffect(new MobEffectInstance(MobEffects.BAD_OMEN, 20, 5));
 					}
 				}
-			} else if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK) {
-				if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION) {
+			} else if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK.get()) {
+				if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION.get()) {
 					AABB aabb = new AABB(current.getX() - 32.0D, current.getY() - 12.0D, current.getZ() - 32.0D, current.getX() + 32.0D, current.getY() + 12.0D, current.getZ() + 32.0D);
+					//TODO: choose randomly
 					current.level.getEntities(current, aabb, entity -> {
 						if(entity instanceof Villager) {
 							if(((InfiltratorDataHolder)entity).isInfiltrator()) {
@@ -193,7 +185,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	
 	@Override
 	public void resetPossibilityBreakingWorkstation() {
-		this.possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN;
+		this.possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN.get();
 	}
 	
 	@Override
@@ -203,7 +195,9 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	
 	@Override
 	public void increasePossibilityBreakingWorkstation() {
-		this.possibilityBreakingWorkstation += 1;
+		if(this.possibilityBreakingWorkstation < INFILTRATOR_BREAK_WORKSTATION_MAX.get()) {
+			this.possibilityBreakingWorkstation += 1;
+		}
 	}
 	
 	@Override

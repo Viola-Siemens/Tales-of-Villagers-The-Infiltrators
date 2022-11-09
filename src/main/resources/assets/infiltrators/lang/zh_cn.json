@@ -3,7 +3,7 @@
   "language.code": "zh_cn",
   "language.region": "China",
   "itemGroup.infiltrators": "村民之书·渗透者",
-  "infiltrators.config.title": "",
+  "infiltrators.config.title": "村民之书·渗透者通用配置文件",
 
   "item.infiltrators.savior_book": "守卫之书",
   "item.infiltrators.seer_book": "预言家之书",
