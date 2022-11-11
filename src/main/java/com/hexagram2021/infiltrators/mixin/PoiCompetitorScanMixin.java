@@ -1,6 +1,6 @@
 package com.hexagram2021.infiltrators.mixin;
 
-import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.ai.behavior.PoiCompetitorScan;
 import net.minecraft.world.entity.ai.village.poi.PoiType;

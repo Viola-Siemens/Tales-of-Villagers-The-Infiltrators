@@ -1,6 +1,6 @@
-package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
+package com.hexagram2021.infiltrators.common.entities.ai.behaviors;
 
-import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.WorkAtPoi;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;

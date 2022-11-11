@@ -5,13 +5,21 @@
   "itemGroup.infiltrators": "Tales of Villagers: The Infiltrators",
   "infiltrators.config.title": "Tales of Villagers: The Infiltrators Common Config",
 
+  "block.infiltrators.analyst_table": "Analyst Table",
+
+  "item.infiltrators.hunter_book": "Hunter Book",
   "item.infiltrators.savior_book": "Savior Book",
   "item.infiltrators.seer_book": "Seer Book",
 
+  "desc.infiltrators.hunter_book": "This book is used on sleeping villagers at night to kill him without losing reputation",
   "desc.infiltrators.savior_book": "This book is used on sleeping villagers at night to stop an infiltrator cause a raid tonight",
   "desc.infiltrators.seer_book": "This book is used on sleeping villagers at night to identity whether a villager is an infiltrator or not",
 
+  "message.hunter.positive": "This villager is successfully killed by your hunter book.",
+  "message.hunter.negative": "What? This book is fake!",
   "message.seer.positive": "This villager IS AN INFILTRATOR! Take him down!",
   "message.seer.negative": "This villager is NOT an infiltrator.",
-  "message.savior.success": "This villager will not cause raids tonight - if he is an infiltrator."
+  "message.savior.success": "This villager will not cause raids tonight - if he is an infiltrator.",
+
+  "death.attack.hunted": "%s is hunted by hunter book"
 }

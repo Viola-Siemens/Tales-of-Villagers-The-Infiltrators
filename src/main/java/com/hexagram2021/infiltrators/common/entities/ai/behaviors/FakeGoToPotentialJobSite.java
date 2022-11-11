@@ -1,4 +1,4 @@
-package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
+package com.hexagram2021.infiltrators.common.entities.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;

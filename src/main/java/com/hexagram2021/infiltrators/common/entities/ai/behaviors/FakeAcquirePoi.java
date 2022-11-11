@@ -1,7 +1,6 @@
-package com.hexagram2021.infiltrators.common.entity.ai.behaviors;
+package com.hexagram2021.infiltrators.common.entities.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
-import com.hexagram2021.infiltrators.Infiltrators;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;

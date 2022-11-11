@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+	{
+	  "rolls": 1.0,
+	  "bonus_rolls": 0.0,
+	  "entries": [
+		{
+		  "type": "minecraft:item",
+		  "name": "infiltrators:seer_book"
+		},
+		{
+		  "type": "minecraft:item",
+		  "name": "infiltrators:savior_book"
+		},
+		{
+		  "type": "minecraft:item",
+		  "name": "infiltrators:hunter_book"
+		},
+		{
+		  "type": "minecraft:item",
+		  "functions": [
+			{
+			  "function": "minecraft:set_nbt",
+			  "tag": "{Potion:\"minecraft:instant_health\"}"
+			}
+		  ],
+		  "name": "minecraft:potion"
+		}
+	  ]
+	}
+  ]
+}

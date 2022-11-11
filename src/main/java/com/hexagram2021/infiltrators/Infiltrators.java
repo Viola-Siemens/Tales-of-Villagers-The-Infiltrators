@@ -4,6 +4,7 @@ import com.hexagram2021.infiltrators.client.ClientProxy;
 import com.hexagram2021.infiltrators.common.InfContent;
 import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import com.hexagram2021.infiltrators.common.register.InfItems;
+import com.hexagram2021.infiltrators.common.world.village.Village;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -65,6 +66,7 @@ public class Infiltrators {
     private void setup(final FMLCommonSetupEvent event) {
         // preinit
         event.enqueueWork(InfContent::init);
+        event.enqueueWork(Village::init);
     }
     
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MODID) {

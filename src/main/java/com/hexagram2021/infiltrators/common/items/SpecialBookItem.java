@@ -1,6 +1,8 @@
-package com.hexagram2021.infiltrators.common;
+package com.hexagram2021.infiltrators.common.items;
 
 import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +42,12 @@ public abstract class SpecialBookItem extends Item {
 				itemStack.shrink(1);
 			}
 			
-			Component component = new TranslatableComponent(this.doBookSpecialUse(sleepingVillagers.get(0)));
+			boolean fake = false;
+			CompoundTag tag = context.getItemInHand().getTag();
+			if(tag != null && tag.contains("Fake", Tag.TAG_BYTE)) {
+				fake = tag.getBoolean("Fake");
+			}
+			Component component = new TranslatableComponent(this.doBookSpecialUse(sleepingVillagers.get(0), fake));
 			
 			if (!context.getLevel().isClientSide) {
 				context.getPlayer().sendMessage(component, Util.NIL_UUID);
@@ -52,5 +59,5 @@ public abstract class SpecialBookItem extends Item {
 		return InteractionResult.PASS;
 	}
 	
-	protected abstract String doBookSpecialUse(Villager villager);
+	protected abstract String doBookSpecialUse(Villager villager, boolean fake);
 }

@@ -21,6 +21,16 @@ public class InfCommonConfig {
 	
 	public static final ForgeConfigSpec.IntValue INFILTRATOR_SPAWN_POSSIBILITY;
 	
+	public static final ForgeConfigSpec.IntValue FAKE_SPECIAL_BOOK_RATE;
+	
+	public static final ForgeConfigSpec.IntValue PRICE_HUNTER_BOOK;
+	public static final ForgeConfigSpec.IntValue PRICE_SAVIOR_BOOK;
+	public static final ForgeConfigSpec.IntValue PRICE_SEER_BOOK;
+	
+	public static final ForgeConfigSpec.IntValue PRICE_POTION;
+	
+	public static final ForgeConfigSpec.IntValue PRICE_BANNER_PATTERN;
+	
 	static {
 		BUILDER.push("infiltrators-common-config");
 		
@@ -44,6 +54,21 @@ public class InfCommonConfig {
 		
 		INFILTRATOR_SPAWN_POSSIBILITY = BUILDER.comment("The possibility for a villager spawned as an infiltrator.")
 				.defineInRange("INFILTRATOR_SPAWN_POSSIBILITY", 5, 0, 100);
+		
+		FAKE_SPECIAL_BOOK_RATE = BUILDER.comment("The possibility for a fake special book that can not work correctly.")
+				.defineInRange("FAKE_SPECIAL_BOOK_RATE", 20, 0, 100);
+		
+		PRICE_HUNTER_BOOK = BUILDER.comment("The price of a hunter book (emeralds).")
+				.defineInRange("PRICE_HUNTER_BOOK", 20, 1, 64);
+		PRICE_SAVIOR_BOOK = BUILDER.comment("The price of a savior book (emeralds).")
+				.defineInRange("PRICE_SAVIOR_BOOK", 20, 1, 64);
+		PRICE_SEER_BOOK = BUILDER.comment("The price of a seer book (emeralds).")
+				.defineInRange("PRICE_SEER_BOOK", 24, 1, 64);
+		
+		PRICE_POTION = BUILDER.comment("The price of potions (emeralds).")
+				.defineInRange("PRICE_POTION", 12, 1, 64);
+		PRICE_BANNER_PATTERN = BUILDER.comment("The price of banner patterns (emeralds).")
+				.defineInRange("PRICE_BANNER_PATTERN", 8, 1, 64);
 		
 		BUILDER.pop();
 		

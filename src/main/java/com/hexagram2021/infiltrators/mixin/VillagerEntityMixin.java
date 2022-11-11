@@ -2,10 +2,10 @@ package com.hexagram2021.infiltrators.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeAcquirePoi;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeGoToPotentialJobSite;
-import com.hexagram2021.infiltrators.common.entity.ai.behaviors.FakeWorkAtPoi;
+import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeAcquirePoi;
+import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeGoToPotentialJobSite;
+import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeWorkAtPoi;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.GlobalPos;
@@ -35,7 +35,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static com.hexagram2021.infiltrators.common.config.InfCommonConfig.*;
 import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;

@@ -1,6 +1,6 @@
 package com.hexagram2021.infiltrators.mixin;
 
-import com.hexagram2021.infiltrators.common.entity.InfiltratorDataHolder;
+import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.npc.Villager;
