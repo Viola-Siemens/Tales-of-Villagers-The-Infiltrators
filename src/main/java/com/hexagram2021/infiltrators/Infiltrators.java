@@ -4,6 +4,7 @@ import com.hexagram2021.infiltrators.client.ClientProxy;
 import com.hexagram2021.infiltrators.common.InfContent;
 import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import com.hexagram2021.infiltrators.common.register.InfItems;
+import com.hexagram2021.infiltrators.common.register.InfTriggers;
 import com.hexagram2021.infiltrators.common.world.village.Village;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTab;
@@ -65,6 +66,8 @@ public class Infiltrators {
 
     private void setup(final FMLCommonSetupEvent event) {
         // preinit
+        InfTriggers.init();
+        
         event.enqueueWork(InfContent::init);
         event.enqueueWork(Village::init);
     }

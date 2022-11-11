@@ -1,0 +1,74 @@
+{
+  "display": {
+	"icon": {
+	  "item": "infiltrators:analyst_table"
+	},
+	"title": {
+	  "translate": "advancements.infiltrators.root.title"
+	},
+	"description": {
+	  "translate": "advancements.infiltrators.root.description"
+	},
+	"frame": "task",
+	"show_toast": true,
+	"announce_to_chat": false,
+	"hidden": false,
+	"background": "minecraft:textures/block/netherite_block.png"
+  },
+  "criteria": {
+	"village_plains": {
+	  "trigger": "minecraft:location",
+	  "conditions": {
+		"location": {
+		  "feature": "minecraft:village_plains"
+		}
+	  }
+	},
+	"village_desert": {
+	  "trigger": "minecraft:location",
+	  "conditions": {
+		"location": {
+		  "feature": "minecraft:village_desert"
+		}
+	  }
+	},
+	"village_savanna": {
+	  "trigger": "minecraft:location",
+	  "conditions": {
+		"location": {
+		  "feature": "minecraft:village_savanna"
+		}
+	  }
+	},
+	"village_snowy": {
+	  "trigger": "minecraft:location",
+	  "conditions": {
+		"location": {
+		  "feature": "minecraft:village_snowy"
+		}
+	  }
+	},
+	"village_taiga": {
+	  "trigger": "minecraft:location",
+	  "conditions": {
+		"location": {
+		  "feature": "minecraft:village_taiga"
+		}
+	  }
+	},
+	"traded": {
+	  "trigger": "minecraft:villager_trade",
+	  "conditions": {}
+	}
+  },
+  "requirements": [
+	[
+	  "village_plains",
+	  "village_desert",
+	  "village_savanna",
+	  "village_snowy",
+	  "village_taiga",
+	  "traded"
+	]
+  ]
+}

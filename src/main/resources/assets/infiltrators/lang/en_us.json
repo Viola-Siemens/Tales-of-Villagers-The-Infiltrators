@@ -7,9 +7,50 @@
 
   "block.infiltrators.analyst_table": "Analyst Table",
 
+  "block.minecraft.banner.infiltrators_villager.black": "Black Villager",
+  "block.minecraft.banner.infiltrators_villager.blue": "Blue Villager",
+  "block.minecraft.banner.infiltrators_villager.brown": "Brown Villager",
+  "block.minecraft.banner.infiltrators_villager.cyan": "Cyan Villager",
+  "block.minecraft.banner.infiltrators_villager.gray": "Gray Villager",
+  "block.minecraft.banner.infiltrators_villager.green": "Green Villager",
+  "block.minecraft.banner.infiltrators_villager.lightBlue": "Light Blue Villager",
+  "block.minecraft.banner.infiltrators_villager.lime": "Lime Villager",
+  "block.minecraft.banner.infiltrators_villager.magenta": "Magenta Villager",
+  "block.minecraft.banner.infiltrators_villager.orange": "Orange Villager",
+  "block.minecraft.banner.infiltrators_villager.pink": "Pink Villager",
+  "block.minecraft.banner.infiltrators_villager.purple": "Purple Villager",
+  "block.minecraft.banner.infiltrators_villager.red": "Red Villager",
+  "block.minecraft.banner.infiltrators_villager.silver": "Light Gray Villager",
+  "block.minecraft.banner.infiltrators_villager.white": "White Villager",
+  "block.minecraft.banner.infiltrators_villager.yellow": "Yellow Villager",
+
+  "block.minecraft.banner.infiltrators_illager.black": "Black Illager",
+  "block.minecraft.banner.infiltrators_illager.blue": "Blue Illager",
+  "block.minecraft.banner.infiltrators_illager.brown": "Brown Illager",
+  "block.minecraft.banner.infiltrators_illager.cyan": "Cyan Illager",
+  "block.minecraft.banner.infiltrators_illager.gray": "Gray Illager",
+  "block.minecraft.banner.infiltrators_illager.green": "Green Illager",
+  "block.minecraft.banner.infiltrators_illager.lightBlue": "Light Blue Illager",
+  "block.minecraft.banner.infiltrators_illager.lime": "Lime Illager",
+  "block.minecraft.banner.infiltrators_illager.magenta": "Magenta Illager",
+  "block.minecraft.banner.infiltrators_illager.orange": "Orange Illager",
+  "block.minecraft.banner.infiltrators_illager.pink": "Pink Illager",
+  "block.minecraft.banner.infiltrators_illager.purple": "Purple Illager",
+  "block.minecraft.banner.infiltrators_illager.red": "Red Illager",
+  "block.minecraft.banner.infiltrators_illager.silver": "Light Gray Illager",
+  "block.minecraft.banner.infiltrators_illager.white": "White Illager",
+  "block.minecraft.banner.infiltrators_illager.yellow": "Yellow Illager",
+
   "item.infiltrators.hunter_book": "Hunter Book",
   "item.infiltrators.savior_book": "Savior Book",
   "item.infiltrators.seer_book": "Seer Book",
+
+  "item.infiltrators.villager_banner_pattern": "Banner Pattern",
+  "item.infiltrators.illager_banner_pattern": "Banner Pattern",
+  "item.infiltrators.villager_banner_pattern.desc": "Villager",
+  "item.infiltrators.illager_banner_pattern.desc": "Illager",
+
+  "entity.minecraft.villager.infiltrators.pharmacist": "Pharmacist",
 
   "desc.infiltrators.hunter_book": "This book is used on sleeping villagers at night to kill him without losing reputation",
   "desc.infiltrators.savior_book": "This book is used on sleeping villagers at night to stop an infiltrator cause a raid tonight",
@@ -20,6 +61,11 @@
   "message.seer.positive": "This villager IS AN INFILTRATOR! Take him down!",
   "message.seer.negative": "This villager is NOT an infiltrator.",
   "message.savior.success": "This villager will not cause raids tonight - if he is an infiltrator.",
+
+  "advancements.infiltrators.root.title": "Find and take down the infiltrators!",
+  "advancements.infiltrators.root.description": "Find and take down the infiltrators!",
+  "advancements.infiltrators.zombie_kills_infiltrator.title": "Kill with a Borrowed Sword",
+  "advancements.infiltrators.zombie_kills_infiltrator.description": "Let a zombie kill an infiltrator.",
 
   "death.attack.hunted": "%s is hunted by hunter book"
 }

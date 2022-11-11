@@ -1,0 +1,84 @@
+{
+  "parent": "infiltrators:infiltrators/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:zombie_head"
+    },
+    "title": {
+      "translate": "advancements.infiltrators.zombie_kills_infiltrator.title"
+    },
+    "description": {
+      "translate": "advancements.infiltrators.zombie_kills_infiltrator.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "drowned": {
+      "trigger": "infiltrators:villager_get_killed",
+      "conditions": {
+        "killer": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:drowned"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "husk": {
+      "trigger": "infiltrators:villager_get_killed",
+      "conditions": {
+        "killer": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:husk"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "zombie": {
+      "trigger": "infiltrators:villager_get_killed",
+      "conditions": {
+        "killer": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:zombie"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "zombie_villager": {
+      "trigger": "infiltrators:villager_get_killed",
+      "conditions": {
+        "killer": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:zombie_villager"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "drowned",
+      "husk",
+      "zombie",
+      "zombie_villager"
+    ]
+  ]
+}

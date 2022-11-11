@@ -6,10 +6,13 @@ import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeAcquirePoi;
 import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeGoToPotentialJobSite;
 import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeWorkAtPoi;
+import com.hexagram2021.infiltrators.common.register.InfTriggers;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +21,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -34,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.hexagram2021.infiltrators.common.config.InfCommonConfig.*;
@@ -172,6 +177,22 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 						current.getVillagerData().setProfession(villager.getVillagerData().getProfession());
 						this.setFakeMerchantOffers();
 					});
+				}
+			}
+		}
+	}
+	
+	@Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;releaseAllPois()V", shift = At.Shift.BEFORE))
+	public void tryTriggerAdvancement(DamageSource damageSource, CallbackInfo ci) {
+		if(this.isInfiltrator) {
+			if(damageSource.getEntity() instanceof LivingEntity livingEntity) {
+				Villager current = (Villager)(Object)this;
+				List<Player> players = current.level.getNearbyPlayers(TargetingConditions.forNonCombat().ignoreLineOfSight().range(64.0D), current, current.getBoundingBox().inflate(48.0D, 32.0D, 48.0D));
+				
+				for (Player player: players) {
+					if(player instanceof ServerPlayer serverPlayer) {
+						InfTriggers.VILLAGER_GET_KILLED.trigger(serverPlayer, livingEntity);
+					}
 				}
 			}
 		}

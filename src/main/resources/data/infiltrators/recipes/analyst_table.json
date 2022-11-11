@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"ABA",
+	" P ",
+	"SSS"
+  ],
+  "key": {
+	"P": {
+	  "tag": "minecraft:planks"
+	},
+	"S": {
+	  "tag": "minecraft:wooden_slabs"
+	},
+	"B": {
+	  "item": "minecraft:writable_book"
+	},
+	"A": {
+	  "item": "minecraft:paper"
+	}
+  },
+  "result": {
+	"item": "infiltrators:analyst_table"
+  }
+}

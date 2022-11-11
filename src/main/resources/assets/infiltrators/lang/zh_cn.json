@@ -7,9 +7,50 @@
 
   "block.infiltrators.analyst_table": "分析台",
 
+  "block.minecraft.banner.infiltrators_villager.black": "黑色村民",
+  "block.minecraft.banner.infiltrators_villager.blue": "蓝色村民",
+  "block.minecraft.banner.infiltrators_villager.brown": "棕色村民",
+  "block.minecraft.banner.infiltrators_villager.cyan": "青色村民",
+  "block.minecraft.banner.infiltrators_villager.gray": "灰色村民",
+  "block.minecraft.banner.infiltrators_villager.green": "绿色村民",
+  "block.minecraft.banner.infiltrators_villager.lightBlue": "浅蓝色村民",
+  "block.minecraft.banner.infiltrators_villager.lime": "黄绿色村民",
+  "block.minecraft.banner.infiltrators_villager.magenta": "品红色村民",
+  "block.minecraft.banner.infiltrators_villager.orange": "橙色村民",
+  "block.minecraft.banner.infiltrators_villager.pink": "粉色村民",
+  "block.minecraft.banner.infiltrators_villager.purple": "紫色村民",
+  "block.minecraft.banner.infiltrators_villager.red": "红色村民",
+  "block.minecraft.banner.infiltrators_villager.silver": "浅灰色村民",
+  "block.minecraft.banner.infiltrators_villager.white": "白色村民",
+  "block.minecraft.banner.infiltrators_villager.yellow": "黄色村民",
+
+  "block.minecraft.banner.infiltrators_illager.black": "黑色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.blue": "蓝色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.brown": "棕色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.cyan": "青色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.gray": "灰色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.green": "绿色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.lightBlue": "浅蓝色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.lime": "黄绿色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.magenta": "品红色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.orange": "橙色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.pink": "粉色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.purple": "紫色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.red": "红色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.silver": "浅灰色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.white": "白色灾厄村民",
+  "block.minecraft.banner.infiltrators_illager.yellow": "黄色灾厄村民",
+
   "item.infiltrators.hunter_book": "猎人之书",
   "item.infiltrators.savior_book": "守卫之书",
   "item.infiltrators.seer_book": "预言家之书",
+
+  "item.infiltrators.villager_banner_pattern": "旗帜图案",
+  "item.infiltrators.illager_banner_pattern": "旗帜图案",
+  "item.infiltrators.villager_banner_pattern.desc": "村民",
+  "item.infiltrators.illager_banner_pattern.desc": "灾厄村民",
+
+  "entity.minecraft.villager.infiltrators.pharmacist": "药剂师",
 
   "desc.infiltrators.hunter_book": "这本书使用在正在睡觉的村民身上，可以杀死他的同时不损失你的村庄声望",
   "desc.infiltrators.savior_book": "这本书使用在正在睡觉的村民身上，可以阻止当晚渗透者发动袭击",
@@ -20,6 +61,11 @@
   "message.seer.positive": "这个村民是渗透者！快去制服他！",
   "message.seer.negative": "这个村民不是渗透者。",
   "message.savior.success": "这个村民至少今晚不会引起袭击了——如果他是渗透者的话。",
+
+  "advancements.infiltrators.root.title": "找出那些渗透者，然后制服他们！",
+  "advancements.infiltrators.root.description": "找出那些渗透者，然后制服他们！",
+  "advancements.infiltrators.zombie_kills_infiltrator.title": "借刀杀人",
+  "advancements.infiltrators.zombie_kills_infiltrator.description": "利用僵尸杀死一位渗透者",
 
   "death.attack.hunted": "%s被猎人之书猎杀了"
 }

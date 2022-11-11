@@ -5,10 +5,11 @@ import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.items.SpecialBookItem;
 import com.hexagram2021.infiltrators.common.util.InfDamageSources;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,8 +21,9 @@ import java.util.function.Supplier;
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
 public class InfItems {
-	private static final Item.Properties SPECIAL_BOOK_PROPERTIES = new Item.Properties().stacksTo(16).tab(Infiltrators.ITEM_GROUP);
-	private static final Item.Properties BANNER_PATTERN_PROPERTIES = new Item.Properties().stacksTo(1).tab(Infiltrators.ITEM_GROUP);
+	private static final Item.Properties SPECIAL_BOOK_PROPERTIES = new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP);
+	private static final Item.Properties BANNER_PATTERN_PROPERTIES = new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP);
+	private static final Item.Properties NORMAL_ITEM_PROPERTIES = new Item.Properties().tab(Infiltrators.ITEM_GROUP);
 	
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	
@@ -70,6 +72,9 @@ public class InfItems {
 		BannerPattern pattern = BannerPattern.create(enumName.toUpperCase(), enumName, fullName, true);
 		return new BannerPatternItem(pattern, BANNER_PATTERN_PROPERTIES);
 	});
+	
+	public static final RegistryObject<BlockItem> ANALYST_TABLE = register(InfBlocks.ANALYST_TABLE.getId().getPath(), () ->
+			new BlockItem(InfBlocks.ANALYST_TABLE.get(), NORMAL_ITEM_PROPERTIES));
 	
 	private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
 		return REGISTER.register(name, item);
