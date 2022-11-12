@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
@@ -42,14 +43,14 @@ public abstract class SpecialBookItem extends Item {
 				itemStack.shrink(1);
 			}
 			
-			boolean fake = false;
-			CompoundTag tag = context.getItemInHand().getTag();
-			if(tag != null && tag.contains("Fake", Tag.TAG_BYTE)) {
-				fake = tag.getBoolean("Fake");
-			}
-			Component component = new TranslatableComponent(this.doBookSpecialUse(sleepingVillagers.get(0), fake));
-			
 			if (!context.getLevel().isClientSide) {
+				boolean fake = false;
+				CompoundTag tag = context.getItemInHand().getTag();
+				if(tag != null && tag.contains("Fake", Tag.TAG_BYTE)) {
+					fake = tag.getBoolean("Fake");
+				}
+				Component component = new TranslatableComponent(this.doBookSpecialUse((ServerPlayer)context.getPlayer(), sleepingVillagers.get(0), itemStack, fake));
+				
 				context.getPlayer().sendMessage(component, Util.NIL_UUID);
 				return InteractionResult.CONSUME;
 			}
@@ -59,5 +60,5 @@ public abstract class SpecialBookItem extends Item {
 		return InteractionResult.PASS;
 	}
 	
-	protected abstract String doBookSpecialUse(Villager villager, boolean fake);
+	protected abstract String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake);
 }

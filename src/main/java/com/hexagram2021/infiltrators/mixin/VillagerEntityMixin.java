@@ -2,6 +2,7 @@ package com.hexagram2021.infiltrators.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.hexagram2021.infiltrators.Infiltrators;
 import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeAcquirePoi;
 import com.hexagram2021.infiltrators.common.entities.ai.behaviors.FakeGoToPotentialJobSite;
@@ -11,6 +12,7 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -151,7 +153,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		
 		long timeOfDay = current.level.dayTime() % 24000L;
 		
-		if(this.isInfiltrator()){
+		if(this.isInfiltrator()) {
 			if(timeOfDay == INFILTRATOR_CAUSE_RAID_TICK.get()) {
 				if(this.isImmuneToBadOmen) {
 					this.isImmuneToBadOmen = false;
@@ -161,7 +163,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 						player.addEffect(new MobEffectInstance(MobEffects.BAD_OMEN, 20, 5));
 					}
 				}
-			} else if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK.get()) {
+			}
+			if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK.get()) {
 				if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION.get()) {
 					AABB aabb = new AABB(current.getX() - 32.0D, current.getY() - 12.0D, current.getZ() - 32.0D, current.getX() + 32.0D, current.getY() + 12.0D, current.getZ() + 32.0D);
 					//TODO: choose randomly
@@ -174,7 +177,13 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 						}
 						return false;
 					}).stream().map(entity -> (Villager)entity).findAny().ifPresent(villager -> {
-						current.getVillagerData().setProfession(villager.getVillagerData().getProfession());
+						villager.getBrain().getMemory(MemoryModuleType.JOB_SITE).ifPresentOrElse(
+								globalPos -> current.getBrain().setMemory(MemoryModuleType.JOB_SITE, globalPos),
+								() -> current.getBrain().eraseMemory(MemoryModuleType.JOB_SITE)
+						);
+						current.setVillagerData(current.getVillagerData().setProfession(villager.getVillagerData().getProfession()));
+						current.refreshBrain((ServerLevel)current.level);
+						Infiltrators.LOGGER.debug(current.getDisplayName().getString() + " -> " + villager.getDisplayName().getString());
 						this.setFakeMerchantOffers();
 					});
 				}
@@ -237,7 +246,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		}
 		Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.get(profession);
 		for(int i = 1; i <= level; ++i) {
-			current.addOffersFromItemListings(current.getOffers(), trades.get(level), 2);
+			current.addOffersFromItemListings(current.getOffers(), trades.get(i), 2);
 		}
 	}
 	

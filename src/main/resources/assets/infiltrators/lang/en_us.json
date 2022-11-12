@@ -66,6 +66,12 @@
   "advancements.infiltrators.root.description": "Find and take down the infiltrators!",
   "advancements.infiltrators.zombie_kills_infiltrator.title": "Kill with a Borrowed Sword",
   "advancements.infiltrators.zombie_kills_infiltrator.description": "Let a zombie kill an infiltrator.",
+  "advancements.infiltrators.seer_success.title": "Bad Identity!",
+  "advancements.infiltrators.seer_success.description": "Find an infiltrator by seer book.",
+  "advancements.infiltrators.savior_success.title": "'Rest' in Peace",
+  "advancements.infiltrators.savior_success.description": "Use savior book on a villager.",
+  "advancements.infiltrators.hunter_success.title": "Ice-cold Killer",
+  "advancements.infiltrators.hunter_success.description": "Use hunter book to kill a villager.",
 
   "death.attack.hunted": "%s is hunted by hunter book"
 }

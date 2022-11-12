@@ -1,0 +1,45 @@
+{
+  "parent": "infiltrators:infiltrators/root",
+  "display": {
+    "icon": {
+      "item": "infiltrators:seer_book"
+    },
+    "title": {
+      "translate": "advancements.infiltrators.seer_success.title"
+    },
+    "description": {
+      "translate": "advancements.infiltrators.seer_success.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "seer": {
+      "trigger": "infiltrators:player_use_special_book",
+      "conditions": {
+        "book": {
+          "items": [
+            "infiltrators:seer_book"
+          ]
+        },
+        "villager": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:villager",
+              "nbt": "{IsInfiltrator: 1b}"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "seer"
+    ]
+  ]
+}

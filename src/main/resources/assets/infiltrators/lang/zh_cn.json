@@ -66,6 +66,12 @@
   "advancements.infiltrators.root.description": "找出那些渗透者，然后制服他们！",
   "advancements.infiltrators.zombie_kills_infiltrator.title": "借刀杀人",
   "advancements.infiltrators.zombie_kills_infiltrator.description": "利用僵尸杀死一位渗透者",
+  "advancements.infiltrators.seer_success.title": "查杀！",
+  "advancements.infiltrators.seer_success.description": "使用预言家之书确认一位渗透者",
+  "advancements.infiltrators.savior_success.title": "别整幺蛾子",
+  "advancements.infiltrators.savior_success.description": "对村民使用守卫之书",
+  "advancements.infiltrators.hunter_success.title": "冷血杀手",
+  "advancements.infiltrators.hunter_success.description": "使用猎人之书杀死一个村民",
 
   "death.attack.hunted": "%s被猎人之书猎杀了"
 }

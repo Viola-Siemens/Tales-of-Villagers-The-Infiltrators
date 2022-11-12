@@ -5,11 +5,10 @@ import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.items.SpecialBookItem;
 import com.hexagram2021.infiltrators.common.util.InfDamageSources;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.item.BannerPatternItem;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -29,30 +28,35 @@ public class InfItems {
 	
 	public static final RegistryObject<SpecialBookItem> SEER_BOOK = register("seer_book", () -> new SpecialBookItem(SPECIAL_BOOK_PROPERTIES) {
 		@Override
-		protected String doBookSpecialUse(Villager villager, boolean fake) {
+		protected String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake) {
 			boolean notWorking = fake && villager.getRandom().nextInt(100) < InfCommonConfig.FAKE_SPECIAL_BOOK_RATE.get();
-			return (((InfiltratorDataHolder)villager).isInfiltrator() ^ notWorking) ?
-					"message.seer.positive" : "message.seer.negative";
+			if(((InfiltratorDataHolder)villager).isInfiltrator() ^ notWorking) {
+				InfTriggers.PLAYER_USE_SPECIAL_BOOK.trigger(player, villager, itemStack);
+				return "message.seer.positive";
+			}
+			return "message.seer.negative";
 		}
 	});
 	
 	public static final RegistryObject<SpecialBookItem> SAVIOR_BOOK = register("savior_book", () -> new SpecialBookItem(SPECIAL_BOOK_PROPERTIES) {
 		@Override
-		protected String doBookSpecialUse(Villager villager, boolean fake) {
+		protected String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake) {
 			boolean notWorking = fake && villager.getRandom().nextInt(100) < InfCommonConfig.FAKE_SPECIAL_BOOK_RATE.get();
 			if(!notWorking) {
 				((InfiltratorDataHolder)villager).setImmuneToBadOmen();
 			}
+			InfTriggers.PLAYER_USE_SPECIAL_BOOK.trigger(player, villager, itemStack);
 			return "message.savior.success";
 		}
 	});
 	
 	public static final RegistryObject<SpecialBookItem> HUNTER_BOOK = register("hunter_book", () -> new SpecialBookItem(SPECIAL_BOOK_PROPERTIES) {
 		@Override
-		protected String doBookSpecialUse(Villager villager, boolean fake) {
+		protected String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake) {
 			boolean notWorking = fake && villager.getRandom().nextInt(100) < InfCommonConfig.FAKE_SPECIAL_BOOK_RATE.get();
 			if(!notWorking) {
-				villager.die(InfDamageSources.HUNTED);
+				villager.hurt(InfDamageSources.HUNTED, Float.MAX_VALUE);
+				InfTriggers.PLAYER_USE_SPECIAL_BOOK.trigger(player, villager, itemStack);
 				return "message.hunter.positive";
 			}
 			return "message.hunter.negative";
