@@ -6,7 +6,6 @@ import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.items.SpecialBookItem;
 import com.hexagram2021.infiltrators.common.util.InfDamageSources;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BannerPattern;

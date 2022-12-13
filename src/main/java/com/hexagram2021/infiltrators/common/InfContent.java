@@ -1,9 +1,6 @@
 package com.hexagram2021.infiltrators.common;
 
-import com.hexagram2021.infiltrators.common.register.InfBlockEntities;
-import com.hexagram2021.infiltrators.common.register.InfBlocks;
-import com.hexagram2021.infiltrators.common.register.InfItems;
-import com.hexagram2021.infiltrators.common.register.InfTags;
+import com.hexagram2021.infiltrators.common.register.*;
 import com.hexagram2021.infiltrators.common.world.village.Village;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -16,6 +13,7 @@ public class InfContent {
 		InfBlockEntities.init(bus);
 		InfTags.init();
 		Village.Registers.init(bus);
+		InfMenuTypes.init(bus);
 	}
 	
 	public static void init() {
