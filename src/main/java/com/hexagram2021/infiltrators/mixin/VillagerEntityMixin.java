@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -55,6 +56,8 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN.get();
 	
 	boolean isImmuneToBadOmen;
+	
+	int nearWithIllagerTickCoolDown;
 	
 	@Inject(method = "registerBrainGoals", at = @At(value = "HEAD"), cancellable = true)
 	private void registerInfiltratorBrainGoals(Brain<Villager> brain, CallbackInfo ci) {
@@ -93,6 +96,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		if(this.isInfiltrator) {
 			nbt.putInt("PossibilityBreakingWorkstation", this.possibilityBreakingWorkstation);
 			nbt.putBoolean("IsImmuneToBadOmen", this.isImmuneToBadOmen);
+			nbt.putInt("NearWithIllagerTickCoolDown", this.nearWithIllagerTickCoolDown);
 		}
 	}
 	
@@ -100,8 +104,9 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	private void readIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
 		if (nbt.contains("IsInfiltrator")) {
 			this.isInfiltrator = nbt.getBoolean("IsInfiltrator");
-			this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
 			this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
+			this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
+			this.nearWithIllagerTickCoolDown = nbt.getInt("NearWithIllagerTickCoolDown");
 		} else {
 			this.isImmuneToBadOmen = false;
 			this.isInfiltrator = ((Villager)(Object)this).getRandom().nextInt(100) < INFILTRATOR_SPAWN_POSSIBILITY.get();
@@ -154,6 +159,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 		long timeOfDay = current.level.dayTime() % 24000L;
 		
 		if(this.isInfiltrator()) {
+			//cause raid
 			if(timeOfDay == INFILTRATOR_CAUSE_RAID_TICK.get()) {
 				if(this.isImmuneToBadOmen) {
 					this.isImmuneToBadOmen = false;
@@ -164,6 +170,7 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 					}
 				}
 			}
+			//change profession
 			if(timeOfDay == INFILTRATOR_CHANGE_PROFESSION_TICK.get()) {
 				if(current.getRandom().nextInt(100) < INFILTRATOR_POSSIBILITY_CHANGE_PROFESSION.get()) {
 					AABB aabb = new AABB(current.getX() - 32.0D, current.getY() - 12.0D, current.getZ() - 32.0D, current.getX() + 32.0D, current.getY() + 12.0D, current.getZ() + 32.0D);
@@ -187,6 +194,27 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 						this.setFakeMerchantOffers();
 					});
 				}
+			}
+			//join raid
+			if(this.nearWithIllagerTickCoolDown <= 0) {
+				AABB aabb = new AABB(current.getX() - 16.0D, current.getY() - 8.0D, current.getZ() - 16.0D, current.getX() + 16.0D, current.getY() + 8.0D, current.getZ() + 16.0D);
+				if(!current.level.getEntities(current, aabb, entity -> entity instanceof AbstractIllager).isEmpty()) {
+					this.nearWithIllagerTickCoolDown = 100;
+					if(current.getRandom().nextInt(100) < INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY.get()) {
+						AbstractIllager illager = switch (current.getRandom().nextInt(4)) {
+							case 0 -> current.convertTo(EntityType.EVOKER, false);
+							case 1 -> current.convertTo(EntityType.ILLUSIONER, false);
+							case 2 -> current.convertTo(EntityType.VINDICATOR, false);
+							case 3 -> current.convertTo(EntityType.PILLAGER, false);
+							default -> null;
+						};
+						if(illager != null) {
+							illager.setCanJoinRaid(true);
+						}
+					}
+				}
+			} else {
+				this.nearWithIllagerTickCoolDown -= 1;
 			}
 		}
 	}

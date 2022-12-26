@@ -1,6 +1,7 @@
 package com.hexagram2021.infiltrators.common.blocks;
 
 import com.hexagram2021.infiltrators.common.blocks.entities.AnalystTableBlockEntity;
+import com.hexagram2021.infiltrators.common.register.InfBlockEntities;
 import com.hexagram2021.infiltrators.common.register.InfProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +15,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -38,9 +41,14 @@ public class AnalystTableBlock extends BaseEntityBlock {
 		this.registerDefaultState(this.stateDefinition.any().setValue(WRITTEN, Boolean.FALSE).setValue(FACING, Direction.NORTH));
 	}
 	
+	@Override @Nullable
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
+		return level.isClientSide ? null : createTickerHelper(blockEntityType, InfBlockEntities.ANALYST_TABLE.get(), AnalystTableBlockEntity::serverTick);
+	}
+	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		Direction direction = context.getHorizontalDirection().getOpposite();
+		Direction direction = context.getHorizontalDirection();
 		return this.defaultBlockState().setValue(FACING, direction).setValue(WRITTEN, false);
 	}
 	

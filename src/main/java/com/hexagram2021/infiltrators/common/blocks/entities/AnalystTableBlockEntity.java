@@ -1,5 +1,6 @@
 package com.hexagram2021.infiltrators.common.blocks.entities;
 
+import com.hexagram2021.infiltrators.common.blocks.AnalystTableBlock;
 import com.hexagram2021.infiltrators.common.crafting.AnalystTableMenu;
 import com.hexagram2021.infiltrators.common.register.InfBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +65,10 @@ public class AnalystTableBlockEntity extends BaseContainerBlockEntity {
 		return true;
 	}
 	
+	public boolean isWritten() {
+		return !this.isEmpty();
+	}
+	
 	@Override @NotNull
 	public ItemStack getItem(int index) {
 		return index >= 0 && index < this.items.size() ? this.items.get(index) : ItemStack.EMPTY;
@@ -95,5 +102,11 @@ public class AnalystTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void clearContent() {
 		this.items.clear();
+	}
+	
+	public static void serverTick(Level level, BlockPos blockPos, BlockState blockState, AnalystTableBlockEntity blockEntity) {
+		if(blockEntity.isWritten() != blockState.getValue(AnalystTableBlock.WRITTEN)) {
+			level.setBlock(blockPos, blockState.setValue(AnalystTableBlock.WRITTEN, blockEntity.isWritten()), Block.UPDATE_ALL);
+		}
 	}
 }
