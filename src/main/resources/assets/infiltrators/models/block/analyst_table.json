@@ -5,7 +5,7 @@
         "bottom": "minecraft:block/oak_planks",
         "plate": "minecraft:block/oak_planks",
         "rod": "minecraft:block/oak_planks",
-        "paper": "emeraldcraft:block/analyst_paper"
+        "paper": "infiltrators:block/analyst_paper"
     },
 	"elements": [
 		{

@@ -9,11 +9,13 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -34,6 +36,12 @@ public class AnalystTableBlock extends BaseEntityBlock {
 	public AnalystTableBlock(Properties props) {
 		super(props);
 		this.registerDefaultState(this.stateDefinition.any().setValue(WRITTEN, Boolean.FALSE).setValue(FACING, Direction.NORTH));
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Direction direction = context.getHorizontalDirection().getOpposite();
+		return this.defaultBlockState().setValue(FACING, direction).setValue(WRITTEN, false);
 	}
 	
 	@Override
@@ -86,6 +94,11 @@ public class AnalystTableBlock extends BaseEntityBlock {
 	@Override
 	public boolean isPathfindable(@NotNull BlockState blockState, @NotNull BlockGetter level, @NotNull BlockPos blockPos, @NotNull PathComputationType type) {
 		return false;
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> definition) {
+		definition.add(FACING, WRITTEN);
 	}
 	
 	@Override @NotNull

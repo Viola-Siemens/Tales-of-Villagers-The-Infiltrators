@@ -1,6 +1,9 @@
 package com.hexagram2021.infiltrators.client;
 
+import com.hexagram2021.infiltrators.client.screen.AnalystTableScreen;
 import com.hexagram2021.infiltrators.common.register.InfItems;
+import com.hexagram2021.infiltrators.common.register.InfMenuTypes;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +36,7 @@ public class ClientProxy {
 	}
 	
 	private static void registerContainersAndScreens() {
-	
+		MenuScreens.register(InfMenuTypes.ANALYST_TABLE_MENU.get(), AnalystTableScreen::new);
 	}
 	
 	private static void registerBannerPatterns() {

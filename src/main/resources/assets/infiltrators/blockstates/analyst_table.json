@@ -1,0 +1,34 @@
+{
+  "variants": {
+	"facing=east,written=false": {
+	  "model": "infiltrators:block/analyst_table",
+	  "y": 90
+	},
+	"facing=east,written=true": {
+	  "model": "infiltrators:block/analyst_table_written",
+	  "y": 90
+	},
+	"facing=north,written=false": {
+	  "model": "infiltrators:block/analyst_table"
+	},
+	"facing=north,written=true": {
+	  "model": "infiltrators:block/analyst_table_written"
+	},
+	"facing=south,written=false": {
+	  "model": "infiltrators:block/analyst_table",
+	  "y": 180
+	},
+	"facing=south,written=true": {
+	  "model": "infiltrators:block/analyst_table_written",
+	  "y": 180
+	},
+	"facing=west,written=false": {
+	  "model": "infiltrators:block/analyst_table",
+	  "y": 270
+	},
+	"facing=west,written=true": {
+	  "model": "infiltrators:block/analyst_table_written",
+	  "y": 270
+	}
+  }
+}
