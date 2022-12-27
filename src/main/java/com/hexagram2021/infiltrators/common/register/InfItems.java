@@ -6,6 +6,8 @@ import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.items.SpecialBookItem;
 import com.hexagram2021.infiltrators.common.util.InfDamageSources;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -59,6 +61,20 @@ public class InfItems {
 				return "message.hunter.positive";
 			}
 			return "message.hunter.negative";
+		}
+	});
+	
+	public static final RegistryObject<SpecialBookItem> ALCHEMIST_BOOK = register("alchemist_book", () -> new SpecialBookItem(SPECIAL_BOOK_PROPERTIES) {
+		@Override
+		protected String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake) {
+			boolean notWorking = fake && villager.getRandom().nextInt(100) < InfCommonConfig.FAKE_SPECIAL_BOOK_RATE.get();
+			if(!notWorking) {
+				villager.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 2400, 1), player);
+				villager.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 2400, 1), player);
+				InfTriggers.PLAYER_USE_SPECIAL_BOOK.trigger(player, villager, itemStack);
+				return "message.alchemist.positive";
+			}
+			return "message.alchemist.negative";
 		}
 	});
 	

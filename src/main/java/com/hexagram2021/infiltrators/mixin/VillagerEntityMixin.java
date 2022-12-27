@@ -35,6 +35,7 @@ import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -49,7 +50,10 @@ import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;
 
 @SuppressWarnings("unused")
 @Mixin(Villager.class)
-public class VillagerEntityMixin implements InfiltratorDataHolder {
+public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
+	
+	@Shadow
+	protected abstract void releaseAllPois();
 	
 	boolean isInfiltrator;
 	
@@ -123,11 +127,15 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 	
 	@Redirect(method = "releaseAllPois", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;releasePoi(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V", ordinal = 1))
 	public void doNotReleaseJobSiteIfInfiltrator(Villager instance, MemoryModuleType<GlobalPos> memoryModuleType) {
-		//Do nothing
+		if(!((InfiltratorDataHolder)instance).isInfiltrator()) {
+			instance.releasePoi(memoryModuleType);
+		}
 	}
 	@Redirect(method = "releaseAllPois", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;releasePoi(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V", ordinal = 2))
 	public void doNotReleasePotentialJobSiteIfInfiltrator(Villager instance, MemoryModuleType<GlobalPos> memoryModuleType) {
-		//Do nothing
+		if(!((InfiltratorDataHolder)instance).isInfiltrator()) {
+			instance.releasePoi(memoryModuleType);
+		}
 	}
 	
 	@Inject(method = "shouldRestock", at = @At(value = "HEAD"), cancellable = true)
@@ -199,8 +207,9 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 			if(this.nearWithIllagerTickCoolDown <= 0) {
 				AABB aabb = new AABB(current.getX() - 16.0D, current.getY() - 8.0D, current.getZ() - 16.0D, current.getX() + 16.0D, current.getY() + 8.0D, current.getZ() + 16.0D);
 				if(!current.level.getEntities(current, aabb, entity -> entity instanceof AbstractIllager).isEmpty()) {
-					this.nearWithIllagerTickCoolDown = 100;
+					this.nearWithIllagerTickCoolDown = INFILTRATOR_CONVERT_DELAY.get();
 					if(current.getRandom().nextInt(100) < INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY.get()) {
+						this.releaseAllPois();
 						AbstractIllager illager = switch (current.getRandom().nextInt(4)) {
 							case 0 -> current.convertTo(EntityType.EVOKER, false);
 							case 1 -> current.convertTo(EntityType.ILLUSIONER, false);
@@ -232,6 +241,14 @@ public class VillagerEntityMixin implements InfiltratorDataHolder {
 					}
 				}
 			}
+		}
+	}
+	
+	@Inject(method = "wantsToSpawnGolem", at = @At(value = "HEAD"), cancellable = true)
+	public void dontSpawnGolemIfIsInfiltrator(long time, CallbackInfoReturnable<Boolean> cir) {
+		if(this.isInfiltrator) {
+			cir.setReturnValue(Boolean.FALSE);
+			cir.cancel();
 		}
 	}
 	

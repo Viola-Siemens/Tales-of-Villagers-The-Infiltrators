@@ -1,21 +1,26 @@
 package com.hexagram2021.infiltrators.common.items;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -61,4 +66,12 @@ public abstract class SpecialBookItem extends Item {
 	}
 	
 	protected abstract String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake);
+	
+	@Override
+	public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+		ResourceLocation registryName = this.getRegistryName();
+		if(registryName != null) {
+			components.add(new TranslatableComponent("desc." + registryName.getNamespace() + "." + registryName.getPath()).withStyle(ChatFormatting.GRAY));
+		}
+	}
 }

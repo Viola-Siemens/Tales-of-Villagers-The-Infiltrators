@@ -1,0 +1,9 @@
+{
+  "villager.work_pharmacist": {
+    "category": "entity",
+    "sounds": [
+      "infiltrators:villager/work_pharmacist"
+    ],
+    "subtitle": "subtitles.entity.villager.work_pharmacist"
+  }
+}

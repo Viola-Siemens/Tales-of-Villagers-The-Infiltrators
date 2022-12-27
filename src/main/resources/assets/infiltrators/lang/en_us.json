@@ -41,6 +41,7 @@
   "block.minecraft.banner.infiltrators_illager.white": "White Illager",
   "block.minecraft.banner.infiltrators_illager.yellow": "Yellow Illager",
 
+  "item.infiltrators.alchemist_book": "Alchemist Book",
   "item.infiltrators.hunter_book": "Hunter Book",
   "item.infiltrators.savior_book": "Savior Book",
   "item.infiltrators.seer_book": "Seer Book",
@@ -52,10 +53,13 @@
 
   "entity.minecraft.villager.infiltrators.pharmacist": "Pharmacist",
 
+  "desc.infiltrators.alchemist_book": "This book is used on sleeping villagers at night to recover his health and protect from future damages.",
   "desc.infiltrators.hunter_book": "This book is used on sleeping villagers at night to kill him without losing reputation",
   "desc.infiltrators.savior_book": "This book is used on sleeping villagers at night to stop an infiltrator cause a raid tonight",
   "desc.infiltrators.seer_book": "This book is used on sleeping villagers at night to identity whether a villager is an infiltrator or not",
 
+  "message.alchemist.positive": "This villager is successfully healed by your alchemist book.",
+  "message.alchemist.negative": "What? This book is fake!",
   "message.hunter.positive": "This villager is successfully killed by your hunter book.",
   "message.hunter.negative": "What? This book is fake!",
   "message.seer.positive": "This villager IS AN INFILTRATOR! Take him down!",
@@ -72,6 +76,10 @@
   "advancements.infiltrators.savior_success.description": "Use savior book on a villager.",
   "advancements.infiltrators.hunter_success.title": "Ice-cold Killer",
   "advancements.infiltrators.hunter_success.description": "Use hunter book to kill a villager.",
+  "advancements.infiltrators.alchemist_success.title": "Don't worry, I will heal you",
+  "advancements.infiltrators.alchemist_success.description": "Use alchemist book to heal a villager.",
+
+  "subtitles.entity.villager.work_pharmacist": "Pharmacist works",
 
   "death.attack.hunted": "%s is hunted by hunter book"
 }

@@ -14,6 +14,7 @@ public class InfCommonConfig {
 	public static final ForgeConfigSpec.IntValue INFILTRATOR_CHANGE_PROFESSION_TICK;
 	
 	public static final ForgeConfigSpec.IntValue INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY;
+	public static final ForgeConfigSpec.IntValue INFILTRATOR_CONVERT_DELAY;
 	
 	public static final ForgeConfigSpec.IntValue INFILTRATOR_BREAK_OTHERS_WORK;
 	
@@ -24,6 +25,7 @@ public class InfCommonConfig {
 	
 	public static final ForgeConfigSpec.IntValue FAKE_SPECIAL_BOOK_RATE;
 	
+	public static final ForgeConfigSpec.IntValue PRICE_ALCHEMIST_BOOK;
 	public static final ForgeConfigSpec.IntValue PRICE_HUNTER_BOOK;
 	public static final ForgeConfigSpec.IntValue PRICE_SAVIOR_BOOK;
 	public static final ForgeConfigSpec.IntValue PRICE_SEER_BOOK;
@@ -49,8 +51,10 @@ public class InfCommonConfig {
 		BUILDER.pop();
 		
 		BUILDER.push("raid");
-			INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY = BUILDER.comment("The possibility for an infiltrator converts to an illager and joins raid every 100 ticks when he is near with another illager.")
+			INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY = BUILDER.comment("The possibility for an infiltrator converts to an illager and joins raid when he is near with another illager.")
 					.defineInRange("INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY", 10, 1, 100);
+			INFILTRATOR_CONVERT_DELAY = BUILDER.comment("How many tick will an infiltrator try to convert to an illager again after last failure tick.")
+					.defineInRange("INFILTRATOR_CONVERT_DELAY", 100, 20, 10000);
 		BUILDER.pop();
 		
 		BUILDER.push("break-works");
@@ -69,7 +73,9 @@ public class InfCommonConfig {
 		BUILDER.push("special-books");
 			FAKE_SPECIAL_BOOK_RATE = BUILDER.comment("The possibility for a fake special book that can not work correctly.")
 					.defineInRange("FAKE_SPECIAL_BOOK_RATE", 20, 0, 100);
-			
+		
+			PRICE_ALCHEMIST_BOOK = BUILDER.comment("The price of a alchemist book (emeralds).")
+					.defineInRange("PRICE_ALCHEMIST_BOOK", 26, 1, 64);
 			PRICE_HUNTER_BOOK = BUILDER.comment("The price of a hunter book (emeralds).")
 					.defineInRange("PRICE_HUNTER_BOOK", 20, 1, 64);
 			PRICE_SAVIOR_BOOK = BUILDER.comment("The price of a savior book (emeralds).")

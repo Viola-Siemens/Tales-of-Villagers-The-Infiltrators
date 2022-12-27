@@ -85,11 +85,12 @@ public final class Village {
 						),
 						2, ImmutableList.of(
 								new InfTrades.EmeraldForItems(Items.TOTEM_OF_UNDYING, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY),
+								new InfTrades.EmeraldForItems(Items.SADDLE, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY),
 								new InfTrades.ItemsForEmeralds(Items.NAME_TAG, 22, 1, InfTrades.DEFAULT_SUPPLY, InfTrades.XP_LEVEL_2_SELL)
 						),
 						3, ImmutableList.of(
-								new InfTrades.EmeraldForItems(Items.SADDLE, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_BUY),
-								new InfTrades.ItemsForEmeralds(InfItems.HUNTER_BOOK::get, PRICE_HUNTER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL)
+								new InfTrades.ItemsForEmeralds(InfItems.HUNTER_BOOK::get, PRICE_HUNTER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL),
+								new InfTrades.ItemsForEmeralds(InfItems.ALCHEMIST_BOOK::get, PRICE_ALCHEMIST_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL)
 						),
 						4, ImmutableList.of(
 								new InfTrades.PotionItemsForEmeralds(Potions.HEALING, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL),

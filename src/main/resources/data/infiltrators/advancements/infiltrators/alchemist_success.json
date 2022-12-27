@@ -1,0 +1,35 @@
+{
+  "parent": "infiltrators:infiltrators/root",
+  "display": {
+    "icon": {
+      "item": "infiltrators:alchemist_book"
+    },
+    "title": {
+      "translate": "advancements.infiltrators.alchemist_success.title"
+    },
+    "description": {
+      "translate": "advancements.infiltrators.alchemist_success.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "alchemist": {
+      "trigger": "infiltrators:player_use_special_book",
+      "conditions": {
+        "book": {
+          "items": [
+            "infiltrators:alchemist_book"
+          ]
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "alchemist"
+    ]
+  ]
+}

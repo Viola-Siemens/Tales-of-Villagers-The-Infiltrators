@@ -41,6 +41,7 @@
   "block.minecraft.banner.infiltrators_illager.white": "白色灾厄村民",
   "block.minecraft.banner.infiltrators_illager.yellow": "黄色灾厄村民",
 
+  "item.infiltrators.alchemist_book": "药师之书",
   "item.infiltrators.hunter_book": "猎人之书",
   "item.infiltrators.savior_book": "守卫之书",
   "item.infiltrators.seer_book": "预言家之书",
@@ -52,10 +53,13 @@
 
   "entity.minecraft.villager.infiltrators.pharmacist": "药剂师",
 
+  "desc.infiltrators.alchemist_book": "这本书使用在正在睡觉的村民身上，可以使他逐渐恢复生命值，并保护未来受到的一定伤害",
   "desc.infiltrators.hunter_book": "这本书使用在正在睡觉的村民身上，可以杀死他的同时不损失你的村庄声望",
   "desc.infiltrators.savior_book": "这本书使用在正在睡觉的村民身上，可以阻止当晚渗透者发动袭击",
   "desc.infiltrators.seer_book": "这本书使用在正在睡觉的村民身上，可以查验他是否是渗透者",
 
+  "message.alchemist.positive": "你成功治疗了这个村民。",
+  "message.alchemist.negative": "什么？这本书是假的！",
   "message.hunter.positive": "你成功杀死了这个村民。",
   "message.hunter.negative": "什么？这本书是假的！",
   "message.seer.positive": "这个村民是渗透者！快去制服他！",
@@ -72,6 +76,10 @@
   "advancements.infiltrators.savior_success.description": "对村民使用守卫之书",
   "advancements.infiltrators.hunter_success.title": "冷血杀手",
   "advancements.infiltrators.hunter_success.description": "使用猎人之书杀死一个村民",
+  "advancements.infiltrators.alchemist_success.title": "别担心，我来治疗你",
+  "advancements.infiltrators.alchemist_success.description": "使用药师之书治疗一个村民",
+
+  "subtitles.entity.villager.work_pharmacist": "药剂师：工作",
 
   "death.attack.hunted": "%s被猎人之书猎杀了"
 }

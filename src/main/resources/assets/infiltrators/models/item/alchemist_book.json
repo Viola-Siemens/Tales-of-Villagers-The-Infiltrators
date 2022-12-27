@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "infiltrators:item/savior_book"
+    "layer0": "infiltrators:item/alchemist_book"
   }
 }
