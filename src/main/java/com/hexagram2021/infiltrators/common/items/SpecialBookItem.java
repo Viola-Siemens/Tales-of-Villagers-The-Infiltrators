@@ -1,11 +1,9 @@
 package com.hexagram2021.infiltrators.common.items;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
@@ -23,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static com.hexagram2021.infiltrators.common.util.RegistryHelper.getRegistryName;
 
 public abstract class SpecialBookItem extends Item {
 	public SpecialBookItem(Properties props) {
@@ -54,9 +54,9 @@ public abstract class SpecialBookItem extends Item {
 				if(tag != null && tag.contains("Fake", Tag.TAG_BYTE)) {
 					fake = tag.getBoolean("Fake");
 				}
-				Component component = new TranslatableComponent(this.doBookSpecialUse((ServerPlayer)context.getPlayer(), sleepingVillagers.get(0), itemStack, fake));
+				Component component = Component.translatable(this.doBookSpecialUse((ServerPlayer)context.getPlayer(), sleepingVillagers.get(0), itemStack, fake));
 				
-				context.getPlayer().sendMessage(component, Util.NIL_UUID);
+				context.getPlayer().sendSystemMessage(component);
 				return InteractionResult.CONSUME;
 			}
 			return InteractionResult.SUCCESS;
@@ -69,9 +69,9 @@ public abstract class SpecialBookItem extends Item {
 	
 	@Override
 	public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-		ResourceLocation registryName = this.getRegistryName();
+		ResourceLocation registryName = getRegistryName(this);
 		if(registryName != null) {
-			components.add(new TranslatableComponent("desc." + registryName.getNamespace() + "." + registryName.getPath()).withStyle(ChatFormatting.GRAY));
+			components.add(Component.translatable("desc." + registryName.getNamespace() + "." + registryName.getPath()).withStyle(ChatFormatting.GRAY));
 		}
 	}
 }

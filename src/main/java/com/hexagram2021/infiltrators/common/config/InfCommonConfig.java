@@ -1,6 +1,5 @@
 package com.hexagram2021.infiltrators.common.config;
 
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class InfCommonConfig {

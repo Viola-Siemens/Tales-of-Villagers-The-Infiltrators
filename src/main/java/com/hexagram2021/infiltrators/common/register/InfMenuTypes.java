@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
 public class InfMenuTypes {
-	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
+	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
 	
 	public static final RegistryObject<MenuType<AnalystTableMenu>> ANALYST_TABLE_MENU = REGISTER.register(
 			"analyst_table", () -> new MenuType<>(AnalystTableMenu::new)

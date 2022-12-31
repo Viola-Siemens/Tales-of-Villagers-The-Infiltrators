@@ -3,7 +3,7 @@ package com.hexagram2021.infiltrators.common.world.village;
 import com.hexagram2021.infiltrators.common.entities.InfiltratorDataHolder;
 import com.hexagram2021.infiltrators.common.items.SpecialBookItem;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -14,8 +14,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
 
 public class InfTrades {
 	public static final int DEFAULT_SUPPLY = 12;
@@ -49,7 +47,7 @@ public class InfTrades {
 		}
 		
 		@Override
-		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull Random random) {
+		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull RandomSource random) {
 			ItemStack itemstack = new ItemStack(this.item, this.cost);
 			return new MerchantOffer(itemstack, new ItemStack(Items.EMERALD), this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
@@ -73,7 +71,7 @@ public class InfTrades {
 		}
 		
 		@Override
-		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull Random random) {
+		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull RandomSource random) {
 			ItemStack itemStack = new ItemStack(this.item, this.numberOfItems);
 			if(this.item instanceof SpecialBookItem) {
 				CompoundTag compoundtag = new CompoundTag();
@@ -100,7 +98,7 @@ public class InfTrades {
 		}
 		
 		@Override
-		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull Random random) {
+		public MerchantOffer getOffer(@NotNull Entity entity, @NotNull RandomSource random) {
 			ItemStack itemStack = new ItemStack(Items.POTION);
 			return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost), PotionUtils.setPotion(itemStack, this.effect), this.maxUses, this.villagerXp, this.priceMultiplier);
 		}

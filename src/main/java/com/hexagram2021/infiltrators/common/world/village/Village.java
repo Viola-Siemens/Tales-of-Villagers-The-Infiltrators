@@ -3,15 +3,16 @@ package com.hexagram2021.infiltrators.common.world.village;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.hexagram2021.infiltrators.common.register.InfBannerPatterns;
 import com.hexagram2021.infiltrators.common.register.InfBlocks;
 import com.hexagram2021.infiltrators.common.register.InfItems;
 import com.hexagram2021.infiltrators.common.util.InfSounds;
 import com.hexagram2021.infiltrators.mixin.HeroGiftsTaskAccess;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Block;
@@ -25,9 +26,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 import static com.hexagram2021.infiltrators.common.config.InfCommonConfig.*;
+import static com.hexagram2021.infiltrators.common.util.RegistryHelper.getRegistryName;
 
 public final class Village {
 	public static final ResourceLocation PHARMACIST = new ResourceLocation(MODID, "pharmacist");
@@ -38,14 +41,14 @@ public final class Village {
 	
 	public static final class Registers {
 		public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
-		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, MODID);
+		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, MODID);
 		
 		public static final RegistryObject<PoiType> POI_ANALYST_TABLE = POINTS_OF_INTEREST.register(
-				"analyst_table", () -> createPOI("analyst_table", assembleStates(InfBlocks.ANALYST_TABLE.get()))
+				"analyst_table", () -> createPOI(assembleStates(InfBlocks.ANALYST_TABLE.get()))
 		);
 		
 		public static final RegistryObject<VillagerProfession> PHARMACIST = PROFESSIONS.register(
-				"pharmacist", () -> createProf(Village.PHARMACIST, POI_ANALYST_TABLE.get(), InfSounds.VILLAGER_WORK_PHARMACIST)
+				"pharmacist", () -> createProf(Village.PHARMACIST, POI_ANALYST_TABLE::getKey, InfSounds.VILLAGER_WORK_PHARMACIST)
 		);
 		
 		private static Collection<BlockState> assembleStates(Block block) {
@@ -53,16 +56,19 @@ public final class Village {
 		}
 		
 		@SuppressWarnings("SameParameterValue")
-		private static PoiType createPOI(String name, Collection<BlockState> block) {
-			return new PoiType(new ResourceLocation(MODID, name).toString(), ImmutableSet.copyOf(block), 1, 1);
+		private static PoiType createPOI(Collection<BlockState> block) {
+			return new PoiType(ImmutableSet.copyOf(block), 1, 1);
 		}
 		
 		@SuppressWarnings("SameParameterValue")
-		private static VillagerProfession createProf(ResourceLocation name, PoiType poi, SoundEvent sound) {
+		private static VillagerProfession createProf(ResourceLocation name, Supplier<ResourceKey<PoiType>> poi, SoundEvent sound) {
+			ResourceKey<PoiType> poiName = poi.get();
 			return new VillagerProfession(
-					name.toString(), poi,
-					ImmutableSet.<Item>builder().build(),
-					ImmutableSet.<Block>builder().build(),
+					name.toString(),
+					p -> p.is(poiName),
+					p -> p.is(poiName),
+					ImmutableSet.of(),
+					ImmutableSet.of(),
 					sound
 			);
 		}
@@ -77,7 +83,7 @@ public final class Village {
 	public static class Events {
 		@SubscribeEvent
 		public static void registerTrades(VillagerTradesEvent event) {
-			if(PHARMACIST.equals(event.getType().getRegistryName())) {
+			if(PHARMACIST.equals(getRegistryName(event.getType()))) {
 				event.getTrades().putAll(ImmutableMap.of(
 						1, ImmutableList.of(
 								new InfTrades.ItemsForEmeralds(InfItems.SAVIOR_BOOK::get, PRICE_SAVIOR_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_1_SELL),
@@ -98,8 +104,8 @@ public final class Village {
 								new InfTrades.PotionItemsForEmeralds(Potions.STRENGTH, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL)
 						),
 						5, ImmutableList.of(
-								new InfTrades.ItemsForEmeralds(InfItems.VILLAGER_BANNER_PATTERN::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE),
-								new InfTrades.ItemsForEmeralds(InfItems.ILLAGER_BANNER_PATTERN::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE)
+								new InfTrades.ItemsForEmeralds(InfBannerPatterns.VILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE),
+								new InfTrades.ItemsForEmeralds(InfBannerPatterns.ILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE)
 						)
 				));
 			}

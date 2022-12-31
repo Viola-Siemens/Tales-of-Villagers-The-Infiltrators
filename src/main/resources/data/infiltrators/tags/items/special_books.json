@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
 	"infiltrators:seer_book",
-	"infiltrators:savior_book"
+	"infiltrators:savior_book",
+	"infiltrators:hunter_book",
+	"infiltrators:alchemist_book"
   ]
 }

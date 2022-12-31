@@ -1,12 +1,16 @@
 package com.hexagram2021.infiltrators.common.entities.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.ai.behavior.AcquirePoi;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -18,7 +22,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -27,13 +30,13 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 	private static final int BATCH_SIZE = 5;
 	private static final int RATE = 20;
 	public static final int SCAN_RANGE = 48;
-	private final PoiType poiType;
+	private final Predicate<Holder<PoiType>> poiType;
 	private final MemoryModuleType<GlobalPos> memoryToAcquire;
 	private final boolean onlyIfAdult;
 	private long nextScheduledStart;
 	private final Long2ObjectMap<FakeAcquirePoi.JitteredLinearRetry> batchCache = new Long2ObjectOpenHashMap<>();
 	
-	public FakeAcquirePoi(PoiType poiType, MemoryModuleType<GlobalPos> moduleType, MemoryModuleType<GlobalPos> memoryToAcquire, boolean onlyIfAdult) {
+	public FakeAcquirePoi(Predicate<Holder<PoiType>> poiType, MemoryModuleType<GlobalPos> moduleType, MemoryModuleType<GlobalPos> memoryToAcquire, boolean onlyIfAdult) {
 		super(constructEntryConditionMap(moduleType, memoryToAcquire));
 		this.poiType = poiType;
 		this.memoryToAcquire = memoryToAcquire;
@@ -78,27 +81,27 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 			retry.markAttempt(tick);
 			return true;
 		};
-		Set<BlockPos> set = poimanager
-				.findAllClosestFirst(this.poiType.getPredicate(), predicate, villager.blockPosition(), SCAN_RANGE, PoiManager.Occupancy.ANY)
+		Set<Pair<Holder<PoiType>, BlockPos>> set = poimanager
+				.findAllClosestFirstWithType(this.poiType, predicate, villager.blockPosition(), SCAN_RANGE, PoiManager.Occupancy.ANY)
 				.limit(BATCH_SIZE).collect(Collectors.toSet());
-		Path path = villager.getNavigation().createPath(set, this.poiType.getValidRange());
+		Path path = AcquirePoi.findPathToPois(villager, set);
 		if (path != null && path.canReach()) {
 			BlockPos blockpos1 = path.getTarget();
 			poimanager.getType(blockpos1).ifPresent((poiType) -> {
-				takeWithoutAcquireTicket(poimanager, this.poiType.getPredicate(), (blockPos) -> blockPos.equals(blockpos1), blockpos1, 1);
+				takeWithoutAcquireTicket(poimanager, this.poiType, (blockPos) -> blockPos.equals(blockpos1), blockpos1, 1);
 				villager.getBrain().setMemory(this.memoryToAcquire, GlobalPos.of(level.dimension(), blockpos1));
 				this.batchCache.clear();
 				DebugPackets.sendPoiTicketCountPacket(level, blockpos1);
 			});
 		} else {
-			for(BlockPos blockpos : set) {
-				this.batchCache.computeIfAbsent(blockpos.asLong(), (v) -> new FakeAcquirePoi.JitteredLinearRetry(villager.level.random, tick));
+			for(Pair<Holder<PoiType>, BlockPos> pair : set) {
+				this.batchCache.computeIfAbsent(pair.getSecond().asLong(), (v) -> new FakeAcquirePoi.JitteredLinearRetry(villager.level.random, tick));
 			}
 		}
 	}
 	
 	@SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
-	private static Optional<BlockPos> takeWithoutAcquireTicket(PoiManager manager, Predicate<PoiType> checkPoi, Predicate<BlockPos> checkPos, BlockPos blockPos, int range) {
+	private static Optional<BlockPos> takeWithoutAcquireTicket(PoiManager manager, Predicate<Holder<PoiType>> checkPoi, Predicate<BlockPos> checkPos, BlockPos blockPos, int range) {
 		return manager.getInRange(checkPoi, blockPos, range, PoiManager.Occupancy.ANY)
 				.filter((record) -> checkPos.test(record.getPos())).findFirst().map(PoiRecord::getPos);
 	}
@@ -107,12 +110,12 @@ public class FakeAcquirePoi extends Behavior<Villager> {
 		private static final int MIN_INTERVAL_INCREASE = 40;
 		private static final int INTERVAL_INCREASE = 40;
 		private static final int MAX_RETRY_PATHFINDING_INTERVAL = 400;
-		private final Random random;
+		private final RandomSource random;
 		private long previousAttemptTimestamp;
 		private long nextScheduledAttemptTimestamp;
 		private int currentDelay;
 		
-		JitteredLinearRetry(Random random, long attempt) {
+		JitteredLinearRetry(RandomSource random, long attempt) {
 			this.random = random;
 			this.markAttempt(attempt);
 		}

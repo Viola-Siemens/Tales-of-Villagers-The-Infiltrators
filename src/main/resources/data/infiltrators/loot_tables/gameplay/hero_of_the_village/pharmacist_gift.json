@@ -19,6 +19,10 @@
 		},
 		{
 		  "type": "minecraft:item",
+		  "name": "infiltrators:alchemist_book"
+		},
+		{
+		  "type": "minecraft:item",
 		  "functions": [
 			{
 			  "function": "minecraft:set_nbt",

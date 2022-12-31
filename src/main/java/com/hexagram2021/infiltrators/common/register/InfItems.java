@@ -10,7 +10,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,7 +21,6 @@ import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
 public class InfItems {
 	private static final Item.Properties SPECIAL_BOOK_PROPERTIES = new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP);
-	private static final Item.Properties BANNER_PATTERN_PROPERTIES = new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP);
 	private static final Item.Properties NORMAL_ITEM_PROPERTIES = new Item.Properties().tab(Infiltrators.ITEM_GROUP);
 	
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -78,24 +76,10 @@ public class InfItems {
 		}
 	});
 	
-	public static final RegistryObject<BannerPatternItem> VILLAGER_BANNER_PATTERN = register("villager_banner_pattern", () -> {
-		String enumName = MODID + "_villager";
-		String fullName = "inf_villager";
-		BannerPattern pattern = BannerPattern.create(enumName.toUpperCase(), enumName, fullName, true);
-		return new BannerPatternItem(pattern, BANNER_PATTERN_PROPERTIES);
-	});
-	
-	public static final RegistryObject<BannerPatternItem> ILLAGER_BANNER_PATTERN = register("illager_banner_pattern", () -> {
-		String enumName = MODID + "_illager";
-		String fullName = "inf_illager";
-		BannerPattern pattern = BannerPattern.create(enumName.toUpperCase(), enumName, fullName, true);
-		return new BannerPatternItem(pattern, BANNER_PATTERN_PROPERTIES);
-	});
-	
 	public static final RegistryObject<BlockItem> ANALYST_TABLE = register(InfBlocks.ANALYST_TABLE.getId().getPath(), () ->
 			new BlockItem(InfBlocks.ANALYST_TABLE.get(), NORMAL_ITEM_PROPERTIES));
 	
-	private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
+	static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
 		return REGISTER.register(name, item);
 	}
 	

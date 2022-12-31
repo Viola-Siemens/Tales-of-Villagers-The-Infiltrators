@@ -24,7 +24,7 @@ import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -332,15 +332,15 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 				Pair.of(0, new WakeUp()),
 				Pair.of(0, new ReactToBell()),
 				Pair.of(0, new SetRaidStatus()),
-				Pair.of(0, new ValidateNearbyPoi(villagerprofession.getJobPoiType(), MemoryModuleType.JOB_SITE)),
-				Pair.of(0, new ValidateNearbyPoi(villagerprofession.getJobPoiType(), MemoryModuleType.POTENTIAL_JOB_SITE)),
+				Pair.of(0, new ValidateNearbyPoi(villagerprofession.acquirableJobSite(), MemoryModuleType.JOB_SITE)),
+				Pair.of(0, new ValidateNearbyPoi(villagerprofession.acquirableJobSite(), MemoryModuleType.POTENTIAL_JOB_SITE)),
 				Pair.of(1, new MoveToTargetSink()),
 				Pair.of(3, new LookAndFollowTradingPlayerSink(speed)),
 				Pair.of(5, new GoToWantedItem<>(speed, false, 4)),
-				Pair.of(6, new FakeAcquirePoi(villagerprofession.getJobPoiType(), MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, true)),
+				Pair.of(6, new FakeAcquirePoi(villagerprofession.acquirableJobSite(), MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, true)),
 				Pair.of(7, new FakeGoToPotentialJobSite(speed)),
-				Pair.of(10, new AcquirePoi(PoiType.HOME, MemoryModuleType.HOME, false, Optional.of(VILLAGER_HAPPY))),
-				Pair.of(10, new AcquirePoi(PoiType.MEETING, MemoryModuleType.MEETING_POINT, true, Optional.of(VILLAGER_HAPPY))),
+				Pair.of(10, new AcquirePoi((poiType) -> poiType.is(PoiTypes.HOME), MemoryModuleType.HOME, false, Optional.of(VILLAGER_HAPPY))),
+				Pair.of(10, new AcquirePoi((poiType) -> poiType.is(PoiTypes.MEETING), MemoryModuleType.MEETING_POINT, true, Optional.of(VILLAGER_HAPPY))),
 				Pair.of(10, new AssignProfessionFromJobSite()),
 				Pair.of(10, new ResetProfession())
 		);

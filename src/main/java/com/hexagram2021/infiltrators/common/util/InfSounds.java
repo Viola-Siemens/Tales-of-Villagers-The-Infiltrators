@@ -1,19 +1,19 @@
 package com.hexagram2021.infiltrators.common.util;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegisterEvent;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class InfSounds {
-	static final Set<SoundEvent> registeredEvents = new HashSet<>();
+	static final Map<ResourceLocation, SoundEvent> registeredEvents = new HashMap<>();
 	
 	public static final SoundEvent VILLAGER_WORK_PHARMACIST = registerSound("villager.work_pharmacist");
 	
@@ -21,13 +21,11 @@ public class InfSounds {
 	private static SoundEvent registerSound(String name) {
 		ResourceLocation location = new ResourceLocation(MODID, name);
 		SoundEvent event = new SoundEvent(location);
-		registeredEvents.add(event.setRegistryName(location));
+		registeredEvents.put(location, event);
 		return event;
 	}
 	
-	@SubscribeEvent
-	public static void registerSounds(RegistryEvent.Register<SoundEvent> evt) {
-		for(SoundEvent event : registeredEvents)
-			evt.getRegistry().register(event);
+	public static void init(RegisterEvent event) {
+		event.register(Registry.SOUND_EVENT_REGISTRY, helper -> registeredEvents.forEach(helper::register));
 	}
 }
