@@ -2,6 +2,7 @@ package com.hexagram2021.infiltrators.common.register;
 
 import com.hexagram2021.infiltrators.Infiltrators;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.Item;
@@ -30,9 +31,9 @@ public class InfBannerPatterns {
 	
 	private static BannerEntry addBanner(String name, String hashName) {
 		RegistryObject<BannerPattern> pattern = REGISTER.register(name, () -> new BannerPattern("inf_"+hashName));
-		TagKey<BannerPattern> tag = TagKey.create(Registry.BANNER_PATTERN_REGISTRY, pattern.getId());
+		TagKey<BannerPattern> tag = TagKey.create(Registry.BANNER_PATTERN_REGISTRY, new ResourceLocation(MODID, "pattern_item/" + name));
 		RegistryObject<BannerPatternItem> item = InfItems.register(name + "_banner_pattern", () -> new BannerPatternItem(
-				tag, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP).stacksTo(1)
+				tag, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).tab(Infiltrators.ITEM_GROUP)
 		));
 		BannerEntry result = new BannerEntry(pattern, tag, item);
 		ALL_BANNERS.add(result);
