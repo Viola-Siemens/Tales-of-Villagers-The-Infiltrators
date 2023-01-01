@@ -1,5 +1,6 @@
 package com.hexagram2021.infiltrators.common.items;
 
+import com.hexagram2021.infiltrators.common.config.InfCommonConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -41,7 +42,7 @@ public abstract class SpecialBookItem extends Item {
 			ItemStack itemStack = context.getItemInHand();
 			if(context.getPlayer() != null) {
 				if (!context.getPlayer().getAbilities().instabuild) {
-					context.getPlayer().getCooldowns().addCooldown(this, 16000);
+					context.getPlayer().getCooldowns().addCooldown(this, InfCommonConfig.SPECIAL_BOOK_COOL_DOWN.get());
 					itemStack.shrink(1);
 				}
 			} else {

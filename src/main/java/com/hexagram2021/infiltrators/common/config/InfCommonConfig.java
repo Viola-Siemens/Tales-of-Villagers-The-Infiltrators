@@ -33,6 +33,8 @@ public class InfCommonConfig {
 	
 	public static final ForgeConfigSpec.IntValue PRICE_BANNER_PATTERN;
 	
+	public static final ForgeConfigSpec.IntValue SPECIAL_BOOK_COOL_DOWN;
+	
 	static {
 		BUILDER.push("infiltrators-common-config");
 		
@@ -86,6 +88,9 @@ public class InfCommonConfig {
 					.defineInRange("PRICE_POTION", 12, 1, 64);
 			PRICE_BANNER_PATTERN = BUILDER.comment("The price of banner patterns (emeralds).")
 					.defineInRange("PRICE_BANNER_PATTERN", 8, 1, 64);
+		
+			SPECIAL_BOOK_COOL_DOWN = BUILDER.comment("The cool down in ticks of special books.")
+					.defineInRange("SPECIAL_BOOK_COOL_DOWN", 16000, 20, 24000);
 		BUILDER.pop();
 		
 		BUILDER.pop();

@@ -19,41 +19,81 @@
 	"village_plains": {
 	  "trigger": "minecraft:location",
 	  "conditions": {
-		"location": {
-		  "feature": "minecraft:village_plains"
-		}
+		"player": [
+		  {
+			"condition": "minecraft:entity_properties",
+			"entity": "this",
+			"predicate": {
+			  "location": {
+				"structure": "minecraft:village_plains"
+			  }
+			}
+		  }
+		]
 	  }
 	},
 	"village_desert": {
 	  "trigger": "minecraft:location",
 	  "conditions": {
-		"location": {
-		  "feature": "minecraft:village_desert"
-		}
+		"player": [
+		  {
+			"condition": "minecraft:entity_properties",
+			"entity": "this",
+			"predicate": {
+			  "location": {
+				"structure": "minecraft:village_desert"
+			  }
+			}
+		  }
+		]
 	  }
 	},
 	"village_savanna": {
 	  "trigger": "minecraft:location",
 	  "conditions": {
-		"location": {
-		  "feature": "minecraft:village_savanna"
-		}
+		"player": [
+		  {
+			"condition": "minecraft:entity_properties",
+			"entity": "this",
+			"predicate": {
+			  "location": {
+				"structure": "minecraft:village_savanna"
+			  }
+			}
+		  }
+		]
 	  }
 	},
 	"village_snowy": {
 	  "trigger": "minecraft:location",
 	  "conditions": {
-		"location": {
-		  "feature": "minecraft:village_snowy"
-		}
+		"player": [
+		  {
+			"condition": "minecraft:entity_properties",
+			"entity": "this",
+			"predicate": {
+			  "location": {
+				"structure": "minecraft:village_snowy"
+			  }
+			}
+		  }
+		]
 	  }
 	},
 	"village_taiga": {
 	  "trigger": "minecraft:location",
 	  "conditions": {
-		"location": {
-		  "feature": "minecraft:village_taiga"
-		}
+		"player": [
+		  {
+			"condition": "minecraft:entity_properties",
+			"entity": "this",
+			"predicate": {
+			  "location": {
+				"structure": "minecraft:village_taiga"
+			  }
+			}
+		  }
+		]
 	  }
 	},
 	"traded": {

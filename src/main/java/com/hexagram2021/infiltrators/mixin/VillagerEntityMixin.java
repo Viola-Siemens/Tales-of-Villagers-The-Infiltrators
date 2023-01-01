@@ -12,12 +12,14 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
@@ -32,16 +34,22 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,9 +59,6 @@ import static net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY;
 @SuppressWarnings("unused")
 @Mixin(Villager.class)
 public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
-	
-	@Shadow
-	protected abstract void releaseAllPois();
 	
 	boolean isInfiltrator;
 	
@@ -209,16 +214,60 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 				if(!current.level.getEntities(current, aabb, entity -> entity instanceof AbstractIllager).isEmpty()) {
 					this.nearWithIllagerTickCoolDown = INFILTRATOR_CONVERT_DELAY.get();
 					if(current.getRandom().nextInt(100) < INFILTRATOR_CONVERT_ILLAGER_AND_JOIN_RAID_POSSIBILITY.get()) {
-						this.releaseAllPois();
-						AbstractIllager illager = switch (current.getRandom().nextInt(4)) {
-							case 0 -> current.convertTo(EntityType.EVOKER, false);
-							case 1 -> current.convertTo(EntityType.ILLUSIONER, false);
-							case 2 -> current.convertTo(EntityType.VINDICATOR, false);
-							case 3 -> current.convertTo(EntityType.PILLAGER, false);
-							default -> null;
+						current.releaseAllPois();
+						AbstractIllager illager = null;
+						switch (current.getRandom().nextInt(4)) {
+							case 0 -> illager = current.convertTo(EntityType.EVOKER, false);
+							case 1 -> {
+								illager = current.convertTo(EntityType.ILLUSIONER, false);
+								if(illager != null) {
+									ItemStack weapon = EnchantmentHelper.enchantItem(illager.getRandom(), new ItemStack(Items.BOW), 10, true);
+									if(weapon.getEnchantmentLevel(Enchantments.POWER_ARROWS) == 0) {
+										weapon.enchant(Enchantments.POWER_ARROWS, illager.getRandom().nextInt(3) + 3);
+									}
+									illager.setItemSlot(EquipmentSlot.MAINHAND, weapon);
+								}
+							}
+							case 2 -> {
+								illager = current.convertTo(EntityType.VINDICATOR, false);
+								if(illager != null) {
+									ItemStack weapon = EnchantmentHelper.enchantItem(illager.getRandom(), new ItemStack(Items.IRON_AXE), 10, true);
+									if(weapon.getEnchantmentLevel(Enchantments.SHARPNESS) == 0) {
+										weapon.enchant(Enchantments.SHARPNESS, illager.getRandom().nextInt(3) + 3);
+									}
+									illager.setItemSlot(EquipmentSlot.MAINHAND, weapon);
+								}
+							}
+							case 3 -> {
+								illager = current.convertTo(EntityType.PILLAGER, false);
+								if(illager != null) {
+									ItemStack weapon = EnchantmentHelper.enchantItem(illager.getRandom(), new ItemStack(Items.CROSSBOW), 10, true);
+									if(weapon.getEnchantmentLevel(Enchantments.QUICK_CHARGE) == 0) {
+										weapon.enchant(Enchantments.QUICK_CHARGE, illager.getRandom().nextInt(2) + 2);
+									}
+									illager.setItemSlot(EquipmentSlot.MAINHAND, weapon);
+									
+									int count = illager.getRandom().nextInt(8) - 1;
+									if(count > 0) {
+										ItemStack fireworks = new ItemStack(Items.FIREWORK_ROCKET, count);
+										CompoundTag nbt = fireworks.getOrCreateTagElement(FireworkRocketItem.TAG_FIREWORKS);
+										nbt.putByte(FireworkRocketItem.TAG_FLIGHT, (byte) 2);
+										CompoundTag explosion = new CompoundTag();
+										explosion.putByte(FireworkRocketItem.TAG_EXPLOSION_TYPE, (byte) FireworkRocketItem.Shape.LARGE_BALL.getId());
+										explosion.putIntArray(FireworkRocketItem.TAG_EXPLOSION_COLORS, Collections.singletonList(DyeColor.GRAY.getFireworkColor()));
+										explosion.putBoolean(FireworkRocketItem.TAG_EXPLOSION_TRAIL, illager.getRandom().nextBoolean());
+										explosion.putBoolean(FireworkRocketItem.TAG_EXPLOSION_FLICKER, illager.getRandom().nextBoolean());
+										ListTag list = new ListTag();
+										list.add(explosion);
+										nbt.put(FireworkRocketItem.TAG_EXPLOSIONS, list);
+										illager.setItemSlot(EquipmentSlot.OFFHAND, fireworks);
+									}
+								}
+							}
 						};
 						if(illager != null) {
 							illager.setCanJoinRaid(true);
+							illager.setPersistenceRequired();
 						}
 					}
 				}
