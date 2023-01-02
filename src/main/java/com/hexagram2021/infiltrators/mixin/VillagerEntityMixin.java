@@ -31,6 +31,7 @@ import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
@@ -41,6 +42,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -64,9 +66,14 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 	
 	int possibilityBreakingWorkstation = INFILTRATOR_BREAK_WORKSTATION_MIN.get();
 	
-	boolean isImmuneToBadOmen;
+	boolean isImmuneToBadOmen = false;
 	
-	int nearWithIllagerTickCoolDown;
+	int nearWithIllagerTickCoolDown = 0;
+	
+	@Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/npc/VillagerType;)V", at = @At(value = "TAIL"))
+	private void setIsInfiltrator(EntityType<? extends Villager> entityType, Level level, VillagerType villagerType, CallbackInfo ci) {
+		this.isInfiltrator = ((Villager)(Object)this).getRandom().nextInt(100) < INFILTRATOR_SPAWN_POSSIBILITY.get();
+	}
 	
 	@Inject(method = "registerBrainGoals", at = @At(value = "HEAD"), cancellable = true)
 	private void registerInfiltratorBrainGoals(Brain<Villager> brain, CallbackInfo ci) {
@@ -113,12 +120,11 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 	private void readIsInfiltrator(CompoundTag nbt, CallbackInfo ci) {
 		if (nbt.contains("IsInfiltrator")) {
 			this.isInfiltrator = nbt.getBoolean("IsInfiltrator");
-			this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
-			this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
-			this.nearWithIllagerTickCoolDown = nbt.getInt("NearWithIllagerTickCoolDown");
-		} else {
-			this.isImmuneToBadOmen = false;
-			this.isInfiltrator = ((Villager)(Object)this).getRandom().nextInt(100) < INFILTRATOR_SPAWN_POSSIBILITY.get();
+			if(this.isInfiltrator) {
+				this.possibilityBreakingWorkstation = nbt.getInt("PossibilityBreakingWorkstation");
+				this.isImmuneToBadOmen = nbt.getBoolean("IsImmuneToBadOmen");
+				this.nearWithIllagerTickCoolDown = nbt.getInt("NearWithIllagerTickCoolDown");
+			}
 		}
 	}
 	
@@ -264,7 +270,7 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 									}
 								}
 							}
-						};
+						}
 						if(illager != null) {
 							illager.setCanJoinRaid(true);
 							illager.setPersistenceRequired();
