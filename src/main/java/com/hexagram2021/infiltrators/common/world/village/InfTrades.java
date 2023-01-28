@@ -15,6 +15,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class InfTrades {
 	public static final int DEFAULT_SUPPLY = 12;
 	public static final int COMMON_ITEMS_SUPPLY = 16;

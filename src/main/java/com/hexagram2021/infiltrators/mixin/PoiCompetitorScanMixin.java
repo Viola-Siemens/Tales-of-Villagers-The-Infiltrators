@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PoiCompetitorScan.class)
 public class PoiCompetitorScanMixin {
 	@Inject(method = "competesForSameJobsite", at = @At(value = "HEAD"), cancellable = true)
-	private void ignoreInfiltrator(GlobalPos pos, Holder<PoiType> poiType, Villager other, CallbackInfoReturnable<Boolean> cir) {
+	private static void ignoreInfiltrator(GlobalPos pos, Holder<PoiType> poiType, Villager other, CallbackInfoReturnable<Boolean> cir) {
 		if(((InfiltratorDataHolder)other).isInfiltrator()) {
 			cir.setReturnValue(Boolean.FALSE);
 			cir.cancel();

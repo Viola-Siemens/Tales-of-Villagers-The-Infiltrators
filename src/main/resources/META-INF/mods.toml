@@ -1,6 +1,7 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[44,)"
 license="GNU Affero General Public License v3.0"
+issueTrackerURL="https://github.com/Viola-Siemens/Tales-of-Villagers-The-Infiltrators/issues"
 
 [[mods]]
 modId="infiltrators"
@@ -21,13 +22,13 @@ Can you still beat the game and save the village?
 [[dependencies.infiltrators]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[44,)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.infiltrators]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"

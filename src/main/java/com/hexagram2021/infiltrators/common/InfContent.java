@@ -14,6 +14,7 @@ import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class InfContent {
+	@SuppressWarnings("unused")
 	public static void modConstruction(IEventBus bus, Consumer<Runnable> runLater) {
 		InfBlocks.init(bus);
 		InfItems.init(bus);

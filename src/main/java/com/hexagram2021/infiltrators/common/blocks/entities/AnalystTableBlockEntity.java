@@ -92,6 +92,7 @@ public class AnalystTableBlockEntity extends BaseContainerBlockEntity {
 	
 	@Override
 	public boolean stillValid(@NotNull Player player) {
+		assert this.level != null;
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		}

@@ -10,9 +10,10 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
 
+@SuppressWarnings("ConstantConditions")
 public class InfBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
-	
+
 	public static final RegistryObject<BlockEntityType<AnalystTableBlockEntity>> ANALYST_TABLE = REGISTER.register(
 		"analyst_table", () -> new BlockEntityType<>(
 				AnalystTableBlockEntity::new, ImmutableSet.of(InfBlocks.ANALYST_TABLE.get()), null

@@ -31,6 +31,7 @@ public class InfBlocks {
 		REGISTER.register(bus);
 	}
 	
+	@SuppressWarnings("unused")
 	public static final class BlockEntry<T extends Block> implements Supplier<T>, ItemLike {
 		private final RegistryObject<T> regObject;
 		private final Supplier<BlockBehaviour.Properties> properties;

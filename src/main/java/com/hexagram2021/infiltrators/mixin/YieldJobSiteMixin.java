@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(YieldJobSite.class)
 public class YieldJobSiteMixin {
 	@Inject(method = "nearbyWantsJobsite", at = @At(value = "HEAD"), cancellable = true)
-	private void ignoreInfiltrator(Holder<PoiType> poiType, Villager other, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+	private static void ignoreInfiltrator(Holder<PoiType> poiType, Villager other, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
 		if(((InfiltratorDataHolder)other).isInfiltrator()) {
 			cir.setReturnValue(Boolean.FALSE);
 			cir.cancel();

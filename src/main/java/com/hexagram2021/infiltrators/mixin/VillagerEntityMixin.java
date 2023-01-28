@@ -351,53 +351,53 @@ public abstract class VillagerEntityMixin implements InfiltratorDataHolder {
 	}
 	
 	//TODO: Infiltrator will NOT give gift to hero.
-	private static ImmutableList<Pair<Integer, ? extends Behavior<? super Villager>>> getInfiltratorWorkPackage(
+	private static ImmutableList<Pair<Integer, ? extends BehaviorControl<? super Villager>>> getInfiltratorWorkPackage(
 			VillagerProfession villagerprofession, @SuppressWarnings("SameParameterValue") float speed
 	) {
 		return ImmutableList.of(
 				getMinimalLookBehavior(),
 				Pair.of(5, new RunOne<>(ImmutableList.of(
 						Pair.of(new FakeWorkAtPoi(), 6),
-						Pair.of(new StrollAroundPoi(MemoryModuleType.JOB_SITE, 0.4F, 4), 3),
-						Pair.of(new StrollToPoi(MemoryModuleType.JOB_SITE, 0.4F, 1, 10), 5)
+						Pair.of(StrollAroundPoi.create(MemoryModuleType.JOB_SITE, 0.4F, 4), 3),
+						Pair.of(StrollToPoi.create(MemoryModuleType.JOB_SITE, 0.4F, 1, 10), 5)
 				))),
 				Pair.of(10, new ShowTradesToPlayer(400, 1600)),
-				Pair.of(10, new SetLookAndInteract(EntityType.PLAYER, 4)),
-				Pair.of(2, new SetWalkTargetFromBlockMemory(MemoryModuleType.JOB_SITE, speed, 9, 100, 1200)),
-				Pair.of(99, new UpdateActivityFromSchedule())
+				Pair.of(10, SetLookAndInteract.create(EntityType.PLAYER, 4)),
+				Pair.of(2, SetWalkTargetFromBlockMemory.create(MemoryModuleType.JOB_SITE, speed, 9, 100, 1200)),
+				Pair.of(99, UpdateActivityFromSchedule.create())
 		);
 	}
 	
-	private static Pair<Integer, Behavior<LivingEntity>> getMinimalLookBehavior() {
+	private static Pair<Integer, BehaviorControl<LivingEntity>> getMinimalLookBehavior() {
 		return Pair.of(5, new RunOne<>(ImmutableList.of(
-				Pair.of(new SetEntityLookTarget(EntityType.VILLAGER, 8.0F), 2),
-				Pair.of(new SetEntityLookTarget(EntityType.PLAYER, 8.0F), 2),
+				Pair.of(SetEntityLookTarget.create(EntityType.VILLAGER, 8.0F), 2),
+				Pair.of(SetEntityLookTarget.create(EntityType.PLAYER, 8.0F), 2),
 				Pair.of(new DoNothing(30, 60), 8)
 		)));
 	}
 	
-	private static ImmutableList<Pair<Integer, ? extends Behavior<? super Villager>>> getInfiltratorCorePackage(
+	private static ImmutableList<Pair<Integer, ? extends BehaviorControl<? super Villager>>> getInfiltratorCorePackage(
 			VillagerProfession villagerprofession, @SuppressWarnings("SameParameterValue") float speed
 	) {
 		return ImmutableList.of(
 				Pair.of(0, new Swim(0.8F)),
-				Pair.of(0, new InteractWithDoor()),
+				Pair.of(0, InteractWithDoor.create()),
 				Pair.of(0, new LookAtTargetSink(45, 90)),
 				Pair.of(0, new VillagerPanicTrigger()),
-				Pair.of(0, new WakeUp()),
-				Pair.of(0, new ReactToBell()),
-				Pair.of(0, new SetRaidStatus()),
-				Pair.of(0, new ValidateNearbyPoi(villagerprofession.acquirableJobSite(), MemoryModuleType.JOB_SITE)),
-				Pair.of(0, new ValidateNearbyPoi(villagerprofession.acquirableJobSite(), MemoryModuleType.POTENTIAL_JOB_SITE)),
+				Pair.of(0, WakeUp.create()),
+				Pair.of(0, ReactToBell.create()),
+				Pair.of(0, SetRaidStatus.create()),
+				Pair.of(0, ValidateNearbyPoi.create(villagerprofession.acquirableJobSite(), MemoryModuleType.JOB_SITE)),
+				Pair.of(0, ValidateNearbyPoi.create(villagerprofession.acquirableJobSite(), MemoryModuleType.POTENTIAL_JOB_SITE)),
 				Pair.of(1, new MoveToTargetSink()),
 				Pair.of(3, new LookAndFollowTradingPlayerSink(speed)),
-				Pair.of(5, new GoToWantedItem<>(speed, false, 4)),
+				Pair.of(5, GoToWantedItem.create(speed, false, 4)),
 				Pair.of(6, new FakeAcquirePoi(villagerprofession.acquirableJobSite(), MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, true)),
 				Pair.of(7, new FakeGoToPotentialJobSite(speed)),
-				Pair.of(10, new AcquirePoi((poiType) -> poiType.is(PoiTypes.HOME), MemoryModuleType.HOME, false, Optional.of(VILLAGER_HAPPY))),
-				Pair.of(10, new AcquirePoi((poiType) -> poiType.is(PoiTypes.MEETING), MemoryModuleType.MEETING_POINT, true, Optional.of(VILLAGER_HAPPY))),
-				Pair.of(10, new AssignProfessionFromJobSite()),
-				Pair.of(10, new ResetProfession())
+				Pair.of(10, AcquirePoi.create((poiType) -> poiType.is(PoiTypes.HOME), MemoryModuleType.HOME, false, Optional.of(VILLAGER_HAPPY))),
+				Pair.of(10, AcquirePoi.create((poiType) -> poiType.is(PoiTypes.MEETING), MemoryModuleType.MEETING_POINT, true, Optional.of(VILLAGER_HAPPY))),
+				Pair.of(10, AssignProfessionFromJobSite.create()),
+				Pair.of(10, ResetProfession.create())
 		);
 	}
 }

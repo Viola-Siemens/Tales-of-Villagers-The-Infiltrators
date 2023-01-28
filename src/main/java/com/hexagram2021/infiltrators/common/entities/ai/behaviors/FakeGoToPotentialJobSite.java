@@ -30,6 +30,7 @@ public class FakeGoToPotentialJobSite extends Behavior<Villager> {
 		return villager.getBrain().hasMemoryValue(MemoryModuleType.POTENTIAL_JOB_SITE);
 	}
 	
+	@SuppressWarnings("OptionalGetWithoutIsPresent")
 	@Override
 	protected void tick(@NotNull ServerLevel level, @NotNull Villager villager, long tick) {
 		BehaviorUtils.setWalkAndLookTargetMemories(villager, villager.getBrain().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get().pos(), this.speedModifier, 1);
