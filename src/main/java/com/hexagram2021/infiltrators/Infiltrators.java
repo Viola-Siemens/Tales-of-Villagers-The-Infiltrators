@@ -83,7 +83,7 @@ public class Infiltrators {
         ITEM_GROUP = event.registerCreativeModeTab(new ResourceLocation(MODID, "item_group"), builder -> builder
                 .icon(() -> new ItemStack(InfItems.SEER_BOOK::get))
                 .title(Component.translatable("itemGroup.infiltrators")).displayItems(
-                        (flags, output, hasPermission) -> InfItems.ItemEntry.REGISTERED_ITEMS.forEach(output::accept)
+                        (flags, output) -> InfItems.ItemEntry.REGISTERED_ITEMS.forEach(output::accept)
                 ));
     }
 }

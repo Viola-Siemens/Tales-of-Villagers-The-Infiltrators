@@ -60,7 +60,7 @@ public class InfItems {
 		protected String doBookSpecialUse(ServerPlayer player, Villager villager, ItemStack itemStack, boolean fake) {
 			boolean notWorking = fake && villager.getRandom().nextInt(100) < InfCommonConfig.FAKE_SPECIAL_BOOK_RATE.get();
 			if(!notWorking) {
-				villager.hurt(InfDamageSources.HUNTED, Float.MAX_VALUE);
+				villager.hurt(InfDamageSources.hunted(villager), Float.MAX_VALUE);
 				InfTriggers.PLAYER_USE_SPECIAL_BOOK.trigger(player, villager, itemStack);
 				return "message.hunter.positive";
 			}

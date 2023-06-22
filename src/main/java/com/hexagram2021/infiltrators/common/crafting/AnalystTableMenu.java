@@ -2,7 +2,6 @@ package com.hexagram2021.infiltrators.common.crafting;
 
 import com.hexagram2021.infiltrators.common.blocks.entities.AnalystTableBlockEntity;
 import com.hexagram2021.infiltrators.common.register.InfMenuTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -61,7 +60,7 @@ public class AnalystTableMenu extends AbstractContainerMenu {
 				
 				long l = player.level.getGameTime();
 				if (AnalystTableMenu.this.lastSoundTime != l) {
-					player.level.playSound(null, new BlockPos(player.position()), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+					player.level.playSound(null, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
 					AnalystTableMenu.this.lastSoundTime = l;
 				}
 				super.onTake(player, itemStack);
