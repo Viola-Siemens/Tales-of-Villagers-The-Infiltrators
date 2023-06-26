@@ -1,18 +1,18 @@
 package com.hexagram2021.infiltrators.common.world.village;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.hexagram2021.infiltrators.common.register.InfBannerPatterns;
 import com.hexagram2021.infiltrators.common.register.InfBlocks;
 import com.hexagram2021.infiltrators.common.register.InfItems;
 import com.hexagram2021.infiltrators.common.util.InfSounds;
 import com.hexagram2021.infiltrators.mixin.HeroGiftsTaskAccess;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Block;
@@ -26,6 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.hexagram2021.infiltrators.Infiltrators.MODID;
@@ -83,31 +84,20 @@ public final class Village {
 	public static class Events {
 		@SubscribeEvent
 		public static void registerTrades(VillagerTradesEvent event) {
-			if(PHARMACIST.equals(getRegistryName(event.getType()))) {
-				event.getTrades().putAll(ImmutableMap.of(
-						1, ImmutableList.of(
-								new InfTrades.ItemsForEmeralds(InfItems.SAVIOR_BOOK::get, PRICE_SAVIOR_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_1_SELL),
-								new InfTrades.ItemsForEmeralds(InfItems.SEER_BOOK::get, PRICE_SEER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_1_SELL)
-						),
-						2, ImmutableList.of(
-								new InfTrades.EmeraldForItems(Items.TOTEM_OF_UNDYING, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY),
-								new InfTrades.EmeraldForItems(Items.SADDLE, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY),
-								new InfTrades.ItemsForEmeralds(Items.NAME_TAG, 22, 1, InfTrades.DEFAULT_SUPPLY, InfTrades.XP_LEVEL_2_SELL)
-						),
-						3, ImmutableList.of(
-								new InfTrades.ItemsForEmeralds(InfItems.HUNTER_BOOK::get, PRICE_HUNTER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL),
-								new InfTrades.ItemsForEmeralds(InfItems.ALCHEMIST_BOOK::get, PRICE_ALCHEMIST_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL)
-						),
-						4, ImmutableList.of(
-								new InfTrades.PotionItemsForEmeralds(Potions.HEALING, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL),
-								new InfTrades.PotionItemsForEmeralds(Potions.REGENERATION, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL),
-								new InfTrades.PotionItemsForEmeralds(Potions.STRENGTH, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL)
-						),
-						5, ImmutableList.of(
-								new InfTrades.ItemsForEmeralds(InfBannerPatterns.VILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE),
-								new InfTrades.ItemsForEmeralds(InfBannerPatterns.ILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE)
-						)
-				));
+			Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+			if (PHARMACIST.equals(getRegistryName(event.getType()))) {
+				trades.get(1).add(new InfTrades.ItemsForEmeralds(InfItems.SAVIOR_BOOK::get, PRICE_SAVIOR_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_1_SELL));
+				trades.get(1).add(new InfTrades.ItemsForEmeralds(InfItems.SEER_BOOK::get, PRICE_SEER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_1_SELL));
+				trades.get(2).add(new InfTrades.EmeraldForItems(Items.TOTEM_OF_UNDYING, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY));
+				trades.get(2).add(new InfTrades.EmeraldForItems(Items.SADDLE, 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_2_BUY));
+				trades.get(2).add(new InfTrades.ItemsForEmeralds(Items.NAME_TAG, 22, 1, InfTrades.DEFAULT_SUPPLY, InfTrades.XP_LEVEL_2_SELL));
+				trades.get(3).add(new InfTrades.ItemsForEmeralds(InfItems.HUNTER_BOOK::get, PRICE_HUNTER_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL));
+				trades.get(3).add(new InfTrades.ItemsForEmeralds(InfItems.ALCHEMIST_BOOK::get, PRICE_ALCHEMIST_BOOK.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_3_SELL));
+				trades.get(4).add(new InfTrades.PotionItemsForEmeralds(Potions.HEALING, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL));
+				trades.get(4).add(new InfTrades.PotionItemsForEmeralds(Potions.REGENERATION, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL));
+				trades.get(4).add(new InfTrades.PotionItemsForEmeralds(Potions.STRENGTH, PRICE_POTION.get(), InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_4_SELL));
+				trades.get(5).add(new InfTrades.ItemsForEmeralds(InfBannerPatterns.VILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE));
+				trades.get(5).add(new InfTrades.ItemsForEmeralds(InfBannerPatterns.ILLAGER.item()::get, PRICE_BANNER_PATTERN.get(), 1, InfTrades.UNCOMMON_ITEMS_SUPPLY, InfTrades.XP_LEVEL_5_TRADE));
 			}
 		}
 	}
