@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '2.4.1'
+version = '2.4.2'
 group = 'com.hexagram2021.infiltrators'
 archivesBaseName = 'infiltrators'
 
